@@ -168,6 +168,194 @@
     .feature-card-icon {
       color: #333;
     }
+          #theme-toggle-button {
+        position: fixed; /* Keeps it in place while scrolling */
+        top: 50%;        /* Center vertically */
+        right: 0;        /* Attach to the right edge */
+        transform: translateY(-50%); /* Adjust vertical centering */
+        background-color: #3498db; /* Initial button color */
+        color: white;
+        border: none;
+        padding: 12px 10px; /* Adjust padding */
+        border-top-left-radius: 15px; /* Round corners for the 'bulge' effect */
+        border-bottom-left-radius: 15px;
+        cursor: pointer;
+        z-index: 1050; /* Ensure it's above most content but potentially below modals */
+        box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        transition: background-color 0.3s ease;
+        display: flex; /* Use flexbox for icon alignment */
+        align-items: center;
+        justify-content: center;
+        width: 45px; /* Fixed width */
+        height: 50px; /* Fixed height */
+      }
+
+      #theme-toggle-button:hover {
+        background-color: #2980b9; /* Darker blue on hover */
+      }
+
+      #theme-toggle-button i {
+          font-size: 1.4em; /* Adjust icon size */
+      }
+
+
+      /* --- Dark Theme Styles --- */
+      body.dark-theme {
+        background-color: #1a1a1a; /* Dark background for body */
+        color: #e0e0e0; /* Lighter default text color */
+      }
+
+      body.dark-theme .navbar {
+        background-color: #111; /* Even darker navbar */
+        border-bottom: 1px solid #333;
+      }
+
+      body.dark-theme .navbar .logo,
+      body.dark-theme .navbar-menu a {
+        color: #d0d0d0; /* Slightly dimmer navbar text */
+      }
+
+      body.dark-theme .navbar-menu a:hover {
+        color: #5dade2; /* Lighter blue for hover */
+      }
+
+      body.dark-theme .navbar-menu a::after {
+        background-color: #5dade2; /* Lighter blue for underline */
+      }
+
+      body.dark-theme .dropdown-menu {
+        background-color: #222; /* Dark dropdown */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+      }
+
+      body.dark-theme .dropdown-menu a {
+          color: #d0d0d0;
+      }
+
+      body.dark-theme .dropdown-menu a:hover {
+          background-color: #333; /* Darker hover for dropdown items */
+          color: #fff;
+      }
+
+      /* Adjust carousel caption text/background for readability in dark mode */
+      body.dark-theme .carousel-caption {
+          background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent background */
+          padding: 15px;
+          border-radius: 5px;
+      }
+      body.dark-theme .carousel-caption h1,
+      body.dark-theme .carousel-caption p {
+          color: #fff; /* Ensure caption text is white */
+      }
+      body.dark-theme .carousel-caption .btn-primary {
+          background-color: #5dade2;
+          border-color: #5dade2;
+      }
+      body.dark-theme .carousel-caption .btn-primary:hover {
+          background-color: #76c7f0;
+          border-color: #76c7f0;
+      }
+
+
+    body.dark-theme .feature-card {
+      background-color: #2c2c2c; /* Darker card background */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+      border: 1px solid #444;
+    }
+    body.dark-theme .feature-card:hover {
+        background-color: #3a3a3a; /* Slightly lighter card on hover */
+        box-shadow: 0 8px 12px rgba(0,0,0,0.6);
+        transform: scale(1.03); /* Slightly reduce hover scale */
+    }
+
+    body.dark-theme .feature-card h3,
+    body.dark-theme .feature-card p {
+        color: #e0e0e0; /* Light text inside cards */
+    }
+
+    body.dark-theme .feature-card-icon {
+        color: #a0a0a0; /* Dimmer icon color */
+    }
+
+    body.dark-theme #icon-grid h2.border-bottom {
+        color: #e0e0e0;
+        border-bottom-color: #444 !important; /* Ensure border color changes */
+    }
+
+
+    body.dark-theme #footer {
+      background-color: #1a1a1a; /* Match body background */
+    }
+    body.dark-theme #footer .nav-link {
+      color: #a0a0a0; /* Dimmer footer links */
+    }
+    body.dark-theme #footer .nav-link:hover {
+      color: #ccc;
+    }
+    body.dark-theme #footer .border-bottom {
+        border-bottom-color: #444 !important; /* Darker border */
+    }
+    body.dark-theme #footer .text-body-secondary {
+        color: #888 !important; /* Darker copyright text */
+    }
+
+    /* Adjust Chatbot for Dark Theme if needed */
+    body.dark-theme #chatbot-container button {
+        /* Example: Adjust chatbot button colors */
+        /* background-color: #444; */
+        /* color: #ccc; */
+    }
+    body.dark-theme #chatbot-window {
+        background-color: #282828;
+        border: 1px solid #444;
+    }
+      body.dark-theme .chatbot-header {
+        background-color: #333;
+        color: #eee;
+    }
+    body.dark-theme #chatbot-messages .message.user {
+        background-color: #3a3a3a;
+    }
+      body.dark-theme #chatbot-messages .message.bot {
+        background-color: #4a4a4a;
+    }
+    body.dark-theme .chatbot-input-area input {
+        background-color: #333;
+        color: #eee;
+        border: 1px solid #555;
+    }
+      body.dark-theme .chatbot-input-area input::placeholder {
+        color: #888;
+    }
+    body.dark-theme .chatbot-input-area button {
+        /* color: #ccc; */
+    }
+      body.dark-theme .chatbot-disclaimer {
+        color: #888;
+    }
+
+    /* Adjust Search Form in Dark Theme */
+    body.dark-theme .search-form input {
+      background-color: #333;
+      color: #eee;
+      border: 1px solid #555;
+    }
+    body.dark-theme .search-form input::placeholder {
+        color: #888;
+    }
+    body.dark-theme .search-form button {
+      background-color: #5dade2; /* Lighter blue button */
+      border-color: #5dade2;
+    }
+    body.dark-theme .search-form button:hover {
+      background-color: #76c7f0;
+      border-color: #76c7f0;
+    }
+
+    /* Adjust mobile menu in Dark Theme */
+    body.dark-theme .navbar-menu {
+      background-color: #222; /* Darker mobile menu */
+    }
 
     /* Mobile view styles */
     @media screen and (max-width: 768px) {
@@ -401,6 +589,10 @@
     </div>
   </div>
 
+  <button id="theme-toggle-button" aria-label="Toggle Theme">
+    <i id="theme-icon" class="fas fa-sun"></i> <!-- Initial icon (sun for light) -->
+</button>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   
   <script>
@@ -413,6 +605,7 @@
   
   <!-- Chatbot JavaScript -->
   <script src="chatbot.js"></script>
+  <script src="theme.js"></script>
 </body>
 
 </html>
