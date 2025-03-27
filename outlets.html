@@ -33,11 +33,12 @@
 
 <!-- Your other scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" ...></script>
-    <style>
-      .filter-section {
-    background-color:#fffff2;
-    padding: 15px 0;
-    border-bottom: 1px solid #fffff2;
+<style>
+  /* --- Original Filter Styles --- */
+  .filter-section {
+    /* background-color:#fffff2; */ /* Overridden by rule below */
+    /* padding: 15px 0; */        /* Overridden by rule below */
+    /* border-bottom: 1px solid #fffff2; */ /* Overridden by rule below */
   }
 
   .filter-label {
@@ -135,18 +136,264 @@
     color: #fffff2;
     border-color: #8b4513;
   }
-      .filter-section {
-        padding: 20px 0;
-        background-color: #fffff2;
-      }
-      .filter-btn {
-        margin: 5px;
-      }
-      .filter-btn.active {
-        background-color: #007bff;
-        color: #fffff2;
-      }
-    </style>
+
+  .filter-section { /* This rule overrides the first .filter-section definition */
+    padding: 20px 0;
+    background-color: #fffff2;
+    border-bottom: 1px solid #fffff2; /* Added border-bottom back from first definition */
+  }
+
+  .filter-btn {
+    margin: 5px;
+  }
+
+  .filter-btn.active { /* General active state */
+    /* Note: Dark theme specific .active styles will override this when dark mode is on */
+    /* background-color: #007bff; */ /* Commented out as specific buttons handle active state */
+    /* color: #fffff2; */
+  }
+
+  /* --- Theme Toggle Button Styles --- */
+  #theme-toggle-button {
+   position: fixed; /* Keeps it in place while scrolling */
+   top: 50%;        /* Center vertically */
+   right: 0;        /* Attach to the right edge */
+   transform: translateY(-50%); /* Adjust vertical centering */
+   background-color: #3498db; /* Initial button color */
+   color: white;
+   border: none;
+   padding: 12px 10px; /* Adjust padding */
+   border-top-left-radius: 15px; /* Round corners for the 'bulge' effect */
+   border-bottom-left-radius: 15px;
+   cursor: pointer;
+   z-index: 1050; /* Ensure it's above most content but potentially below modals */
+   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+   transition: background-color 0.3s ease;
+   display: flex; /* Use flexbox for icon alignment */
+   align-items: center;
+   justify-content: center;
+   width: 45px; /* Fixed width */
+   height: 50px; /* Fixed height */
+ }
+
+ #theme-toggle-button:hover {
+   background-color: #2980b9; /* Darker blue on hover */
+ }
+
+ #theme-toggle-button i {
+     font-size: 1.4em; /* Adjust icon size */
+ }
+
+ /* --- Dark Theme Styles --- */
+ body.dark-theme {
+   background-color: #1a1a1a; /* Dark background for body */
+   color: #e0e0e0; /* Lighter default text color */
+ }
+
+ /* --- Navbar --- */
+ body.dark-theme .navbar {
+   background-color: #111; /* Even darker navbar */
+   border-bottom: 1px solid #333;
+ }
+
+ body.dark-theme .navbar .logo,
+ body.dark-theme .navbar-menu a {
+   color: #d0d0d0; /* Slightly dimmer navbar text */
+ }
+ body.dark-theme .navbar-menu a:hover { color: #5dade2; }
+ body.dark-theme .navbar-menu a::after { background-color: #5dade2; }
+ body.dark-theme .dropdown-menu { background-color: #222; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); }
+ body.dark-theme .dropdown-menu a { color: #d0d0d0; }
+ body.dark-theme .dropdown-menu a:hover { background-color: #333; color: #fff; }
+ body.dark-theme .search-form input { background-color: #333; color: #eee; border: 1px solid #555; }
+ body.dark-theme .search-form input::placeholder { color: #888; }
+ body.dark-theme .search-form button { background-color: #5dade2; border-color: #5dade2; }
+ body.dark-theme .search-form button:hover { background-color: #76c7f0; border-color: #76c7f0; }
+ body.dark-theme .navbar-menu { background-color: #222; }
+
+ /* --- Carousel Heading --- */
+ body.dark-theme .carousel-caption.custom-caption {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker semi-transparent background */
+    padding: 15px;
+    border-radius: 5px;
+ }
+ body.dark-theme .carousel-caption.custom-caption h1,
+ body.dark-theme .carousel-caption.custom-caption p {
+    color: #fff; /* Ensure caption text is white */
+ }
+
+ /* --- Filter Section --- */
+ body.dark-theme .filter-section {
+    background-color: #222 !important; /* Dark filter background, important might be needed due to inline style */
+    border-bottom-color: #444;
+ }
+ body.dark-theme .filter-section h4,
+ body.dark-theme .filter-label {
+    color: #e0e0e0;
+ }
+ body.dark-theme .custom-dropdown {
+    background-color: #333;
+    border-color: #5dade2;
+    color: #5dade2;
+ }
+ body.dark-theme .custom-dropdown:hover {
+    background-color: #444;
+    border-color: #76c7f0;
+    color: #76c7f0;
+ }
+ body.dark-theme .custom-dropdown-menu {
+    background-color: #282828;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+ }
+ body.dark-theme .dropdown-item {
+    color: #ccc;
+ }
+ body.dark-theme .dropdown-item:hover {
+    background-color: #5dade2;
+    color: #111;
+ }
+ body.dark-theme .filter-section hr {
+    border-top-color: #444; /* Or use 'border-color' if it's a full border */
+    opacity: 0.5;
+    color: #444; /* For older browsers */
+ }
+
+ /* --- Filter Buttons --- */
+ body.dark-theme .custom-filter-btn {
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+ }
+
+ body.dark-theme .custom-filter-btn[data-veg="all"] {
+    background-color:#333;
+    border-color: #888;
+    color: #aaa;
+  }
+  body.dark-theme .custom-filter-btn[data-veg="all"]:hover,
+  body.dark-theme .custom-filter-btn[data-veg="all"].active {
+    background-color: #6c757d;
+    color: #eee;
+    border-color: #6c757d;
+  }
+
+  body.dark-theme .veg-btn {
+    background-color: #333;
+    border-color: #2a8a3e; /* Slightly darker green */
+    color: #34ac4e; /* Lighter green text */
+  }
+  body.dark-theme .veg-btn:hover,
+  body.dark-theme .veg-btn.active {
+    background-color: #28a745;
+    color: #eee;
+    border-color: #28a745;
+  }
+
+  body.dark-theme .nonveg-btn {
+    background-color: #333;
+    border-color: #7a3d11; /* Darker brown */
+    color: #a0522d; /* Lighter brown text */
+  }
+  body.dark-theme .nonveg-btn:hover,
+  body.dark-theme .nonveg-btn.active {
+    background-color: #8b4513;
+    color: #eee;
+    border-color: #8b4513;
+  }
+
+ /* --- Album Section / Item Cards --- */
+ body.dark-theme .album.bg-body-tertiary {
+    background-color: #1a1a1a !important; /* Match body background, important needed to override BS class */
+ }
+ body.dark-theme .item-card .card {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+ }
+ body.dark-theme .item-card .card-heading {
+    color: #e8e8e8;
+ }
+ body.dark-theme .item-card .card-text,
+ body.dark-theme .item-card .text-body-secondary {
+    color: #b0b0b0 !important; /* Need important for text-body-secondary */
+ }
+ body.dark-theme .item-card #price_tag {
+    color: #eee;
+ }
+ body.dark-theme .item-card .btn-primary {
+    background-color: #5dade2;
+    border-color: #5dade2;
+    color: #111;
+ }
+  body.dark-theme .item-card .btn-primary:hover {
+    background-color: #76c7f0;
+    border-color: #76c7f0;
+  }
+ body.dark-theme .item-card .btn-outline-secondary {
+    color: #aaa;
+    border-color: #666;
+ }
+  body.dark-theme .item-card .btn-outline-secondary:hover {
+    background-color: #555;
+    border-color: #666;
+    color: #eee;
+  }
+
+ /* --- Modals --- */
+ body.dark-theme .modal-content {
+    background-color: #282828;
+    border: 1px solid #444;
+    color: #e0e0e0;
+ }
+ body.dark-theme .modal-header {
+    border-bottom: 1px solid #444;
+ }
+ body.dark-theme .modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%); /* Makes the 'X' white */
+ }
+ body.dark-theme .modal-title {
+    color: #eee;
+ }
+ body.dark-theme .modal-footer {
+    border-top: 1px solid #444;
+ }
+  body.dark-theme .modal-footer .btn-primary {
+    background-color: #5dade2;
+    border-color: #5dade2;
+    color: #111;
+ }
+ body.dark-theme .modal-footer .btn-primary:hover {
+    background-color: #76c7f0;
+    border-color: #76c7f0;
+ }
+  body.dark-theme .modal-footer .btn-success {
+    /* Adjust if needed, default BS dark might be okay */
+ }
+
+
+ /* --- Footer --- */
+ body.dark-theme #footer { background-color: #1a1a1a; }
+ body.dark-theme #footer .nav-link { color: #a0a0a0; }
+ body.dark-theme #footer .nav-link:hover { color: #ccc; }
+ body.dark-theme #footer .border-bottom { border-bottom-color: #444 !important; }
+ body.dark-theme #footer .text-body-secondary { color: #888 !important; }
+
+ /* --- Chatbot --- */
+ body.dark-theme #chatbot-container #chatbot-toggle-button { /* Add specific styles if needed */
+    /* Example: */
+    /* background-color: #444; */
+    /* box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5); */
+  }
+ body.dark-theme #chatbot-window { background-color: #282828; border: 1px solid #444; }
+ body.dark-theme .chatbot-header { background-color: #333; color: #eee; }
+ body.dark-theme #chatbot-messages .message.user { background-color: #3a3a3a; }
+ body.dark-theme #chatbot-messages .message.bot { background-color: #4a4a4a; }
+ body.dark-theme .chatbot-input-area input { background-color: #333; color: #eee; border: 1px solid #555; }
+ body.dark-theme .chatbot-input-area input::placeholder { color: #888; }
+ body.dark-theme .chatbot-input-area button { /* Add specific styles if needed */
+     /* Example: */
+     /* color: #ccc; */
+  }
+ body.dark-theme .chatbot-disclaimer { color: #888; }
+
+</style>
   </head>
 
   <body style="background-color: #fffff2;">
@@ -729,6 +976,9 @@
      </div>
   </div>
 </div>
+<button id="theme-toggle-button" aria-label="Toggle Theme">
+  <i id="theme-icon" class="fas fa-sun"></i> <!-- Initial icon -->
+</button>
 
     <!-- Scripts -->
     <script>
@@ -864,5 +1114,6 @@
 
     <script type="module" src="./AI_Analysis.js"></script>
     <script type="module" src="chatbot.js"></script>
+    <script src="theme.js"></script>
   </body>
 </html>
