@@ -26,6 +26,15 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script> <!-- Optional but often useful -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+<!-- Your other scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" ...></script>
+<script src="chatbot.js"></script>
+<script src="rank.js"></script> <!-- Make sure rank.js is loaded AFTER Firebase SDKs -->
     <style>
       .filter-section {
     background-color:#fffff2;
@@ -474,7 +483,7 @@
             </div>
 
             <!-- Card-12 -->
-            <div class="col item-card" data-category="tiffin" data-veg="veg" data-id="Dosa">
+            <div class="col item-card" data-category="tiffin" data-veg="veg" data-id="dosa">
               <div class="card shadow-sm">
                 <img src="images/idli.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
@@ -838,15 +847,33 @@
       filterByCategory('all');
       filterByVeg('all');
       function filterByCategory(category) {
-  selectedCategory = category;
-  const dropdownButton = document.getElementById('categoryDropdown');
-  dropdownButton.textContent = category === 'all' ? 'Select Category' : category.charAt(0).toUpperCase() + category.slice(1);
-  filterItems();
+        selectedCategory = category;
+        const dropdownButton = document.getElementById('categoryDropdown');
+        dropdownButton.textContent = category === 'all' ? 'Select Category' : category.charAt(0).toUpperCase() + category.slice(1);
+        filterItems();
 }
     </script>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="chatbot.js"></script>
-<script src="rank.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAFj0bzxZePc8yhcl-hRbTfYT2zr3VSAT4",
+        authDomain: "eatfull-a637b.firebaseapp.com",
+        projectId: "eatfull-a637b",
+        storageBucket: "eatfull-a637b.firebasestorage.app",
+        messagingSenderId: "62197464037",
+        appId: "1:62197464037:web:8d7b19cdcbdd7573374d0c",
+        measurementId: "G-MX9XXLXTVS"
+      };
+
+      initializeApp(firebaseConfig);
+      console.log("Firebase App Initialized (outlets.html)");
+    </script>
+
+    <script type="module" src="rank.js"></script>
+<script type="module" src="chatbot.js"></script>
+<script type="module" src="rank.js"></script>
   </body>
 </html>
