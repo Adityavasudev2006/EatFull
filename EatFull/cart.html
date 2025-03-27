@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EatFull</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="icon" type="image/png" sizes="192*192" href="images/logo.png">
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="images/favicon.png">
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+AU+SA:wght@100..400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Scoped CSS to prevent affecting navbar */
+        .cart-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .cart-header, .cart-footer {
+            text-align: center;
+            font-weight: bold;
+        }
+        .cart-items {
+            margin-bottom: 20px;
+        }
+    </style>
+  </head>
+
+  <body>
+    <!-- NavBar -->
+    <nav class="navbar">
+      <a href="./home.html" class="logo">
+        <img src="images/logo1.png" alt="EatFull Logo" style="height: 40px;">
+      </a>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-menu">
+        <li><a href="./home.html">Home</a></li>
+        <li><a href="./outlets.html">Outlets</a></li>
+        <li class="dropdown">
+          <a href="#">Cart</a>
+          <ul class="dropdown-menu">
+            <li><a href="./cart.html">View</a></li>
+            <li><a href="#">CheckOut</a></li>
+          </ul>
+        </li>
+        <li><a href="./profile.html">Profile</a></li>
+        <li class="search-form">
+          <input type="search" placeholder="Search">
+          <button>Search</button>
+        </li>
+      </ul>
+    </nav>
+
+    
+    <!-- Heading -->
+    <section id="heading">
+      <div class="px-5 py-5 my-0 text-left">
+        <h1 class="display-5 fw-bold text-body-emphasis">My Cart</h1>
+        <hr />
+      </div>
+    </section>
+    <!-- Title -->
+    <section id="title">
+      <div class="container">
+        <main>
+          <div class="py-5 text-center">
+            
+
+          <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+              <h4
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <span class="text-primary">Your cart</span>
+                <div id="cart-items1" class="badge bg-primary rounded-pill">null</div>
+              </h4>
+              <ul class="list-group mb-3" id="cart-items">
+                <li
+                  class="list-group-item d-flex justify-content-between lh-sm"
+                  
+                >
+                  <div id="itemDiv" >
+                    <h6 class="my-0">Product name</h6>
+                    <small class="text-body-secondary">Brief description</small>
+                  </div>
+                  <span class="text-body-secondary">$12</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between lh-sm"
+                >
+                  <div>
+                    <h6 class="my-0">Second product</h6>
+                    <small class="text-body-secondary">Brief description</small>
+                  </div>
+                  <span class="text-body-secondary">$8</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between lh-sm"
+                >
+                  <div>
+                    <h6 class="my-0">Third item</h6>
+                    <small class="text-body-secondary">Brief description</small>
+                  </div>
+                  <span class="text-body-secondary">$5</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between bg-body-tertiary"
+                >
+                  <div class="text-success">
+                    <h6 class="my-0">Promo code</h6>
+                    <small>EXAMPLECODE</small>
+                  </div>
+                  <span class="text-success">−$5</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span >Total (INR) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <div id="cart-items2"><strong id="total-amount">$null</strong></div>                </li>
+              </ul>
+
+              <form class="card p-2">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Promo code"
+                  />
+                  <button type="submit" class="btn btn-secondary">
+                    Redeem
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-7 col-lg-8">
+              <h4 class="mb-3">Billing address</h4>
+              <form class="needs-validation" novalidate="">
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label for="firstName" class="form-label">First name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="firstName"
+                      placeholder=""
+                      value=""
+                      required=""
+                    />
+                    <div class="invalid-feedback">
+                      Valid first name is required.
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Last name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                      placeholder=""
+                      value=""
+                      required=""
+                    />
+                    <div class="invalid-feedback">
+                      Valid last name is required.
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text">@</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        placeholder="Username"
+                        required=""
+                      />
+                      <div class="invalid-feedback">
+                        Your username is required.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="email" class="form-label"
+                      >Email
+                      <span class="text-body-secondary">(Optional)</span></label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      placeholder="you@example.com"
+                    />
+                    <div class="invalid-feedback">
+                      Please enter a valid email address for shipping updates.
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="address" class="form-label">Address</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="address"
+                      placeholder="1234 Main St"
+                      required=""
+                    />
+                    <div class="invalid-feedback">
+                      Please enter your shipping address.
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="address2" class="form-label"
+                      >Address 2
+                      <span class="text-body-secondary">(Optional)</span></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="address2"
+                      placeholder="Apartment or suite"
+                    />
+                  </div>
+
+                  <div class="col-md-5">
+                    <label for="country" class="form-label">Country</label>
+                    <select class="form-select" id="country" required="">
+                      <option value="">Choose...</option>
+                      <option>United States</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a valid country.
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="state" class="form-label">State</label>
+                    <select class="form-select" id="state" required="">
+                      <option value="">Choose...</option>
+                      <option>California</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please provide a valid state.
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <label for="zip" class="form-label">Zip</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="zip"
+                      placeholder=""
+                      required=""
+                    />
+                    <div class="invalid-feedback">Zip code required.</div>
+                  </div>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="same-address"
+                  />
+                  <label class="form-check-label" for="same-address"
+                    >Shipping address is the same as my billing address</label
+                  >
+                </div>
+
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="save-info"
+                  />
+                  <label class="form-check-label" for="save-info"
+                    >Save this information for next time</label
+                  >
+                </div>
+
+                <hr class="my-4" />
+
+                <h4 class="mb-3">Payment</h4>
+
+                <div class="my-3">
+                  <div class="form-check">
+                    <input
+                      id="credit"
+                      name="paymentMethod"
+                      type="radio"
+                      class="form-check-input"
+                      checked=""
+                      required=""
+                    />
+                    <label class="form-check-label" for="credit"
+                      >Credit card</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      id="debit"
+                      name="paymentMethod"
+                      type="radio"
+                      class="form-check-input"
+                      required=""
+                    />
+                    <label class="form-check-label" for="debit"
+                      >Debit card</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      id="paypal"
+                      name="paymentMethod"
+                      type="radio"
+                      class="form-check-input"
+                      required=""
+                    />
+                    <label class="form-check-label" for="paypal">PayPal</label>
+                  </div>
+                </div>
+
+                <div class="row gy-3">
+                  <div class="col-md-6">
+                    <label for="cc-name" class="form-label">Name on card</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cc-name"
+                      placeholder=""
+                      required=""
+                    />
+                    <small class="text-body-secondary"
+                      >Full name as displayed on card</small
+                    >
+                    <div class="invalid-feedback">Name on card is required</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="cc-number" class="form-label"
+                      >Credit card number</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cc-number"
+                      placeholder=""
+                      required=""
+                    />
+                    <div class="invalid-feedback">
+                      Credit card number is required
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <label for="cc-expiration" class="form-label"
+                      >Expiration</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cc-expiration"
+                      placeholder=""
+                      required=""
+                    />
+                    <div class="invalid-feedback">Expiration date required</div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <label for="cc-cvv" class="form-label">CVV</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cc-cvv"
+                      placeholder=""
+                      required=""
+                    />
+                    <div class="invalid-feedback">Security code required</div>
+                  </div>
+                </div>
+
+                <hr class="my-4" />
+
+                <button class="w-100 btn btn-primary btn-lg" type="submit">
+                  Continue to checkout
+                </button>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <section id="footer">
+      <div class="container">
+        <footer class="py-3 my-4">
+          <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-body-secondary">Home</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-body-secondary">Features</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-body-secondary">Pricing</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-body-secondary">FAQs</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-body-secondary">About</a>
+            </li>
+          </ul>
+          <p class="text-center text-body-secondary">© 2024 Company, Inc</p>
+        </footer>
+      </div>
+      <div id="cart-items">0</div>
+    </section>
+    <!-- Chatbot Container -->
+<div id="chatbot-container">
+  <!-- Chatbot Toggle Button -->
+  <button id="chatbot-toggle-button" aria-label="Open Chat">
+      <i class="fas fa-comment-dots"></i> <!-- Chat icon -->
+  </button>
+
+  <!-- Chatbot Window (Initially Hidden) -->
+  <div id="chatbot-window">
+      <div class="chatbot-header">
+          <span>EatFull AI Assistant</span>
+          <button id="chatbot-close-button" aria-label="Close Chat">×</button>
+      </div>
+      <div id="chatbot-messages">
+          <!-- Messages will appear here -->
+      </div>
+      <!-- Input area structure is slightly different in your JS, it dynamically adds mic/image buttons -->
+      <div class="chatbot-input-area">
+          <input type="text" id="chatbot-input" placeholder="Ask a question...">
+          <!-- Mic and Image buttons are added by JS -->
+          <button id="chatbot-send-button" aria-label="Send Message">
+              <i class="fas fa-paper-plane"></i> <!-- Send icon -->
+          </button>
+      </div>
+      <div class="chatbot-disclaimer">
+         AI responses may not always be perfect.
+     </div>
+  </div>
+</div>
+  <script>
+    // Access the cartItems array from localStorage
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    function displayCart() {
+        const cartContainer = document.getElementById('cart-items');
+        const cartContainer1 = document.getElementById('cart-items1');
+        const cartContainer2 = document.getElementById('cart-items2');
+        const totalItemsElement = document.getElementById('total-items');
+        const totalAmountElement = document.getElementById('total-amount');
+
+        // Clear previous content
+        cartContainer.innerHTML = '';cartContainer1.innerHTML = '';cartContainer2.innerHTML = '';
+
+        let totalQuantity = 0;
+        let totalAmount = 0;
+        let b=0;
+        if (cartItems.length === 0) {
+            cartContainer.innerHTML = '<p>No items in cart yet.</p>';
+            cartContainer1.innerHTML = '<p>0</p>';
+            cartContainer2.innerHTML = '<p>0</p>';
+        } else {
+            cartItems.forEach((item, index) => {
+              b++
+                const itemTotal = item.price * item.quantity;
+                totalQuantity += item.quantity;
+                totalAmount += itemTotal;
+
+                const itemDiv = document.createElement('ul');
+                const itemDiv1 = document.createElement('div');
+                const itemDiv2 = document.createElement('div');
+                itemDiv.classList.add('cart-item');
+                itemDiv1.classList.add('cart-item1');
+                itemDiv2.classList.add('cart-item2');
+                if(b==1){
+                   itemDiv.innerHTML = '';
+                itemDiv.innerHTML = `
+
+                  <li class="list-group-item d-flex justify-content-between lh-sm">
+                  <div id="itemDiv">
+                    <h6 class="my-0">name</h6>
+                  </div>
+                  
+                  <span class="text-body-secondary">tot</span>
+                    &nbsp;&nbsp;<span class="text-body-secondary">qun</span>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-secondary" onclick="removeFromCart(${index})">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                      </svg>
+                    </button></li>;`
+                    cartContainer.appendChild(itemDiv);}
+                    itemDiv.innerHTML=
+                    `<li class="list-group-item d-flex justify-content-between lh-sm">
+                      <div id="itemDiv">
+                        <h6 class="my-0">${item.name}</h6>
+                      </div>
+                      <span class="text-body-secondary">${itemTotal}</span>
+                      &nbsp;&nbsp;<span class="text-body-secondary">${item.quantity}</span>&nbsp;&nbsp;
+                      <button type="button" class="btn btn-secondary" onclick="removeFromCart(${index})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                          <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg>
+                      </button></li>`
+
+                cartContainer.appendChild(itemDiv);
+                cartContainer1.textContent=totalQuantity;
+                // cartContainer1.appendChild(itemDiv1);
+                // cartContainer2.appendChild(itemDiv2);
+            });
+            const itemDiv = document.createElement('ul');
+            itemDiv.classList.add('cart-item');
+
+            itemDiv.innerHTML = `
+                <li class="list-group-item d-flex justify-content-between">
+                  <span >Total (INR)&nbsp;&nbsp; </span>
+                  <div id="cart-items2">&nbsp;&nbsp;&nbsp;&nbsp;<strong id="total-amount">${totalAmount}</strong></div>                
+                  </li>`
+                  cartContainer.appendChild(itemDiv);
+                  const itemDiv1 = document.createElement('div');
+                  itemDiv1.classList.add('cart-item1');
+
+                itemDiv2.innerHTML =`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${totalAmount}`
+                cartContainer1.appendChild(itemDiv1);
+                cartContainer2.appendChild(itemDiv2);
+            // Update total items and total amount
+
+            totalItemsElement.textContent = totalQuantity;
+            totalAmountElement.textContent = totalAmount;
+        }
+    }
+
+    function removeFromCart(index) {
+        cartItems.splice(index, 1);
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        displayCart();
+    }
+
+    window.onload = function() {
+        displayCart();
+    };
+</script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="./cart.js"></script>
+<script src="chatbot.js"></script>
+  </body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin-bottom: 100px; /* Ensure space for chatbot button */
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: #28282B;
+            padding: 10px 20px;
+            position: relative;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            color: #ecf0f1;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .navbar-menu li {
+            position: relative;
+        }
+
+        .navbar-menu a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            display: block;
+        }
+
+        .navbar-menu a:hover {
+            color: #3498db;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: #3498db;
+            left: 50%;
+            bottom: 0;
+            transition: width 0.3s ease, left 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown menu styles */
+        .dropdown-menu {
+            position: absolute;
+            background-color: #28282B;
+            top: 100%;
+            left: 0;
+            width: 200px;
+            display: none;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu a {
+            color: #ecf0f1;
+            padding: 10px;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: white;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Search form */
+        .search-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-form input {
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .search-form button {
+            padding: 6px 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .menu-toggle div {
+            width: 30px;
+            height: 3px;
+            background-color: #ecf0f1;
+            border-radius: 2px;
+        }
+
+        /* Profile card styles */
+        .profile-card {
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #28282B 0%, #3A3A3E 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 15px;
+        }
+        
+        .profile-body {
+            padding: 30px;
+            background: white;
+        }
+        
+        .info-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .edit-btn {
+            background: linear-gradient(135deg, #FF562F 0%, #FF8F50 100%);
+            border: none;
+            padding: 10px 25px;
+            font-weight: 600;
+            margin-top: 20px;
+            color: white;
+        }
+        
+        .edit-btn:hover {
+            background: linear-gradient(135deg, #E04B27 0%, #E57D45 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        /* Logout button styles - matching edit button but different color */
+        .logout-btn {
+            background: linear-gradient(135deg, #28282B 0%, #3A3A3E 100%);
+            border: none;
+            padding: 10px 25px;
+            font-weight: 600;
+            margin-top: 20px;
+            color: white;
+        }
+        
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #1A1A1B 0%, #2A2A2E 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        /* Button container to align buttons side by side */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Mobile view styles */
+        @media screen and (max-width: 768px) {
+            .navbar-menu {
+                position: absolute;
+                top: 50px;
+                right: 20px;
+                background-color: #2c3e50;
+                width: 100%;
+                flex-direction: column;
+                gap: 0;
+                padding: 10px 0;
+                display: none;
+            }
+
+            .navbar-menu li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .navbar-menu.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            /* Stack buttons vertically on mobile */
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NavBar -->
+    <nav class="navbar">
+        <a href="./home.html" class="logo">
+            <img src="images/logo1.png" alt="EatFull Logo" style="height: 40px;">
+        </a>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="./home.html">Home</a></li>
+            <li><a href="./outlets.html">Outlets</a></li>
+            <li class="dropdown">
+                <a href="#">Cart</a>
+                <ul class="dropdown-menu">
+                    <li><a href="./cart.html">View</a></li>
+                    <li><a href="#">CheckOut</a></li>
+                </ul>
+            </li>
+            <li><a href="./profile.html">Profile</a></li>
+            <li class="search-form">
+                <input type="search" placeholder="Search">
+                <button>Search</button>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile Image" class="profile-img" id="profileImageDisplay">
+                        <h3 id="profileName">Loading...</h3>
+                    </div>
+                    
+                    <div class="profile-body">
+                        <div class="info-item row">
+                            <div class="col-md-4 info-label">
+                                <i class="fas fa-user me-2"></i>Full Name
+                            </div>
+                            <div class="col-md-8 info-value" id="profileFullName">
+                                Loading...
+                            </div>
+                        </div>
+                        
+                        <div class="info-item row">
+                            <div class="col-md-4 info-label">
+                                <i class="fas fa-envelope me-2"></i>Email Address
+                            </div>
+                            <div class="col-md-8 info-value" id="profileEmail">
+                                Loading...
+                            </div>
+                        </div>
+                        
+                        <div class="info-item row">
+                            <div class="col-md-4 info-label">
+                                <i class="fas fa-phone me-2"></i>Phone Number
+                            </div>
+                            <div class="col-md-8 info-value" id="profilePhone">
+                                Loading...
+                            </div>
+                        </div>
+                        
+                        <div class="info-item row">
+                            <div class="col-md-4 info-label">
+                                <i class="fas fa-briefcase me-2"></i>Occupation
+                            </div>
+                            <div class="col-md-8 info-value" id="profileOccupation">
+                                Not specified
+                            </div>
+                        </div>
+                        
+                        <div class="button-container">
+                            <button class="btn btn-primary edit-btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="fas fa-edit me-2"></i>Edit Profile
+                            </button>
+                            <button class="btn logout-btn" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm">
+                        <div class="mb-3 row">
+                            <label for="firstName" class="col-sm-3 col-form-label">First Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="editFirstName">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="lastName" class="col-sm-3 col-form-label">Last Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="editLastName">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="email" class="col-sm-3 col-form-label">Email</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="editEmail" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+                            <div class="col-sm-9">
+                                <input type="tel" class="form-control" id="editPhone">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="occupation" class="col-sm-3 col-form-label">Occupation</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="editOccupation">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="profileImage" class="col-sm-3 col-form-label">Profile Image</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="file" id="editProfileImage" accept="image/*">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesBtn" style="background: linear-gradient(135deg, #FF562F 0%, #FF8F50 100%); border: none;">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div id="chatbot-container">
+        <!-- Chatbot Toggle Button -->
+        <button id="chatbot-toggle-button" aria-label="Open Chat">
+             <i class="fas fa-comment-dots"></i> <!-- Chat icon -->
+        </button>
+
+        <!-- Chatbot Window (Initially Hidden) -->
+        <div id="chatbot-window">
+            <div class="chatbot-header">
+                <span>EatFull AI Assistant</span>
+                <button id="chatbot-close-button" aria-label="Close Chat">×</button>
+            </div>
+            <div id="chatbot-messages">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="chatbot-input-area">
+                <input type="text" id="chatbot-input" placeholder="Ask a question...">
+                <button id="chatbot-send-button" aria-label="Send Message">
+                    <i class="fas fa-paper-plane"></i> <!-- Send icon -->
+                </button>
+            </div>
+             <div class="chatbot-disclaimer">
+                AI responses may not always be perfect.
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAFj0bzxZePc8yhcl-hRbTfYT2zr3VSAT4",
+            authDomain: "eatfull-a637b.firebaseapp.com",
+            projectId: "eatfull-a637b",
+            storageBucket: "eatfull-a637b.appspot.com",
+            messagingSenderId: "62197464037",
+            appId: "1:62197464037:web:8d7b19cdcbdd7573374d0c",
+            measurementId: "G-MX9XXLXTVS"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle functionality
+            function toggleMenu() {
+                const menu = document.querySelector('.navbar-menu');
+                menu.classList.toggle('active');
+            }
+            
+            // Attach toggle function to menu button
+            const menuToggle = document.querySelector('.menu-toggle');
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleMenu);
+            }
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                auth.signOut().then(() => {
+                    // Sign-out successful, redirect to index.html
+                    window.location.href = './index.html';
+                }).catch((error) => {
+                    console.error('Logout error:', error);
+                    alert('Error logging out. Please try again.');
+                });
+            });
+
+            // Check if user is logged in
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    // User is signed in, get their data from Firestore
+                    db.collection("users").doc(user.uid).get().then(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            
+                            // Update profile page with user data
+                            document.getElementById('profileName').textContent = `${userData.firstName} ${userData.lastName}`;
+                            document.getElementById('profileFullName').textContent = `${userData.firstName} ${userData.lastName}`;
+                            document.getElementById('profileEmail').textContent = userData.email;
+                            document.getElementById('profilePhone').textContent = userData.phoneNumber;
+                            
+                            // Set occupation if it exists, otherwise keep "Not specified"
+                            if (userData.occupation) {
+                                document.getElementById('profileOccupation').textContent = userData.occupation;
+                            }
+                            
+                            // Populate edit form with current data
+                            document.getElementById('editFirstName').value = userData.firstName;
+                            document.getElementById('editLastName').value = userData.lastName;
+                            document.getElementById('editEmail').value = userData.email;
+                            document.getElementById('editPhone').value = userData.phoneNumber;
+                            document.getElementById('editOccupation').value = userData.occupation || '';
+                        } else {
+                            console.log("No such document!");
+                        }
+                    }).catch(error => {
+                        console.log("Error getting document:", error);
+                    });
+                } else {
+                    // User is not logged in, redirect to login page
+                    window.location.href = 'login.html';
+                }
+            });
+
+            // Get the save button
+            const saveBtn = document.getElementById('saveChangesBtn');
+            
+            // Add click event to the save button
+            saveBtn.addEventListener('click', function() {
+                const user = auth.currentUser;
+                if (!user) return;
+                
+                // Get values from the form
+                const firstName = document.getElementById('editFirstName').value;
+                const lastName = document.getElementById('editLastName').value;
+                const phone = document.getElementById('editPhone').value;
+                const occupation = document.getElementById('editOccupation').value;
+                
+                // Update Firestore with new values
+                db.collection("users").doc(user.uid).update({
+                    firstName: firstName,
+                    lastName: lastName,
+                    phoneNumber: phone,
+                    occupation: occupation
+                }).then(() => {
+                    // Update the profile page with new values
+                    document.getElementById('profileName').textContent = `${firstName} ${lastName}`;
+                    document.getElementById('profileFullName').textContent = `${firstName} ${lastName}`;
+                    document.getElementById('profilePhone').textContent = phone;
+                    document.getElementById('profileOccupation').textContent = occupation || 'Not specified';
+                    
+                    // Handle profile image upload if needed
+                    const fileInput = document.getElementById('editProfileImage');
+                    if (fileInput.files && fileInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('profileImageDisplay').src = e.target.result;
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    }
+                    
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                    modal.hide();
+                    
+                    console.log('Profile updated successfully!');
+                }).catch(error => {
+                    console.error("Error updating profile:", error);
+                    alert('Error updating profile. Please try again.');
+                });
+            });
+        });
+    </script>
+    <!-- Chatbot JavaScript -->
+    <script src="chatbot.js"></script>
+</body>
+</html>

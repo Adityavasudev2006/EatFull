@@ -1,0 +1,386 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+
+.icon-square {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+}
+
+.profile-img {
+  height: 100px;
+  border-radius: 50%;
+}
+.iam {
+  font-family: "Open Sans", serif;
+}
+.display-5 {
+  font-family: "Open Sans", serif;
+}
+
+/* Hero Section Background */
+.hero-section {
+  background-image: url("food1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  min-height: 100vh; /* Ensures full screen height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Ensures text is readable */
+}
+
+/* Optional: Add a semi-transparent overlay */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Adjust opacity for darker effect */
+  z-index: 1;
+}
+
+
+.hero-section > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+
+#myCarousel {
+  width: 40%; /* 40% of the parent container's width */
+  height: 40vh; /* 40% of the viewport height */
+  margin: 0 auto; /* Center the carousel */
+}
+
+.carousel-inner {
+  height: 100%; /* Ensure carousel inner fills the container */
+}
+
+.carousel-item {
+  height: 100%; /* Ensure carousel items fill the container */
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* or contain, depending on your preference */
+}
+
+/* Responsive adjustments (example) */
+@media (max-width: 768px) {
+  /* Adjust for smaller screens (e.g., tablets) */
+  #myCarousel {
+    width: 90%; /* Take up more width on smaller screens */
+    height: 40vh;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Adjust for even smaller screens (e.g., phones) */
+  #myCarousel {
+    width: 100%; /* Full width on phones */
+    height: 40vh;
+  }
+}
+
+/* ... (Rest of your existing CSS) ... */
+
+
+/* ...Button Styling of Outlets Page ... */
+
+
+
+/* ... CSS Coloring for the Section of food ... */
+
+#title .album {
+  background-color: #fffff2 !important;
+}
+
+/* ... CSS Coloring for the Section of Heading Area of Outlets ... */
+.custom-caption {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  width: 70%; /* Adjusted size of the div */
+  height: 60%;
+  max-width: 700px; /* Added max width constraint */
+}
+
+.custom-title {
+  color: white; /* Change color of 'Food Items' */
+  font-size: 60px; /* Adjust font size */
+  font-family: "Pacifico", serif;
+}
+
+.custom-carousel {
+  max-width: 100%; /* Adjusted carousel width */
+  margin: auto; /* Center the carousel */
+}
+
+.custom-carousel .carousel-inner img {
+  height: 400px; /* Adjust height of images */
+  object-fit: cover; /* Ensures images fit well within the carousel */
+}
+
+.navbar .container-fluid {
+  height: 50px; /* Set the desired height */
+}
+
+/* Size and CSS of index page corousal */
+#myCarousel {
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.carousel-item img {
+  height: 400px;
+  object-fit: cover;
+}
+
+.carousel-caption {
+  bottom: 10px; /* Adjust caption position */
+  font-size: 18px; /* Reduce text size if necessary */
+  background: rgba(0, 0, 0, 0.5); /* Adds a semi-transparent background */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+
+/* ... Cards CSS of Outlets.. */
+
+.card-heading {
+  font-weight: bold;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem; /* Add some bottom margin */
+}
+
+.card .btn-group .btn {
+  /* More specific selector */
+  padding: 0.2rem 0.5rem; /* Adjust padding for size */
+  font-size: 1.1rem; /* Adjust font size if needed */
+}
+
+.btn-add-to-cart {
+  padding: 0.2rem 0.5rem; /* Adjust padding for size */
+  font-size: 1.1rem; /* Adjust font size if needed */
+}
+.btn-view-more {
+  padding: 0.2rem 0.5rem; /* Adjust padding for size */
+  font-size: 1.1rem; /* Adjust font size if needed */
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform: scale(1); /* Initial size of the card */
+}
+
+/* On hover, increase the size of the card */
+.card:hover {
+  transform: scale(1.1); /* Scale the card to 110% of its original size */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+}
+
+/*To make the hover effect smoother */
+.card {
+  will-change: transform; /* Informs the browser to optimize for transform */
+  border-radius: 16px; /* Increased border radius for more curved edges */
+  overflow: hidden;
+}
+.card-img-top {
+  border-top-left-radius: 16px; /* Curved top-left corner for image */
+  border-top-right-radius: 16px; /* Curved top-right corner for image */
+  transition: transform 0.3s ease; /* Smooth zoom effect */
+}
+.card-body {
+  padding: 1rem 1.25rem; /* Slightly more padding for breathing room */
+}
+.btn-group .btn {
+            border-radius: 8px; /* Curved buttons */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .card {
+                margin-bottom: 1rem; /* Space between cards on smaller screens */
+            }
+        }
+
+
+
+/* NavBar CSS*/
+     
+       /* Styling of the Navbar */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Body and navbar general styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+    }
+    
+    .navbar {
+      background-color: #28282B;
+      padding: 10px 20px;
+      position: relative;
+    }
+    
+    .navbar .logo {
+      font-size: 24px;
+      color: #ecf0f1;
+      text-transform: uppercase;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    
+    .navbar-menu {
+      list-style: none;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .navbar-menu li {
+      position: relative;
+    }
+    
+    .navbar-menu a {
+      color: #ecf0f1;
+      text-decoration: none;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      display: block;
+    }
+    
+    .navbar-menu a:hover {
+      color: #3498db;
+    }
+    
+    .navbar-menu a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: #3498db;
+      left: 50%;
+      bottom: 0;
+      transition: width 0.3s ease, left 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .navbar-menu a:hover::after {
+      width: 100%;
+    }
+    
+    /* Dropdown menu styles */
+    .dropdown-menu {
+      position: absolute;
+      background-color: #28282B;
+      top: 100%;
+      left: 0;
+      width: 200px;
+      display: none;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dropdown-menu a {
+      color: #ecf0f1;
+      padding: 10px;
+    }
+    
+    .dropdown-menu a:hover {
+      background-color: white;
+    }
+    
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+    
+    /* Search form */
+    .search-form {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .search-form input {
+      padding: 5px 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: none;
+    }
+    
+    .search-form button {
+      padding: 6px 12px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    
+    /* Mobile menu toggle */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+    
+    .menu-toggle div {
+      width: 30px;
+      height: 3px;
+      background-color: #ecf0f1;
+      border-radius: 2px;
+    }
+    
+    /* Mobile view styles */
+    @media screen and (max-width: 768px) {
+      .navbar-menu {
+        position: absolute;
+        top: 50px;
+        right: 20px;
+        background-color: #2c3e50;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+        padding: 10px 0;
+        display: none;
+      }
+      
+      .navbar-menu li {
+        width: 100%;
+        text-align: center;
+      }
+      
+      .navbar-menu.active {
+        display: flex;
+      }
+      
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+ /* CSS of the Golden Star in Outlets*/
+
+ #gold_star{
+  margin-left:10px;
+  margin-bottom:5px;
+ }
