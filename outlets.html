@@ -35,12 +35,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" ...></script>
 <style>
   /* --- Original Filter Styles --- */
-  .filter-section {
-    /* background-color:#fffff2; */ /* Overridden by rule below */
-    /* padding: 15px 0; */        /* Overridden by rule below */
-    /* border-bottom: 1px solid #fffff2; */ /* Overridden by rule below */
-  }
-
+  
   .filter-label {
     font-weight: 500;
     color: #333;
@@ -147,11 +142,7 @@
     margin: 5px;
   }
 
-  .filter-btn.active { /* General active state */
-    /* Note: Dark theme specific .active styles will override this when dark mode is on */
-    /* background-color: #007bff; */ /* Commented out as specific buttons handle active state */
-    /* color: #fffff2; */
-  }
+  
 
   /* --- Theme Toggle Button Styles --- */
   #theme-toggle-button {
@@ -363,9 +354,7 @@
     background-color: #76c7f0;
     border-color: #76c7f0;
  }
-  body.dark-theme .modal-footer .btn-success {
-    /* Adjust if needed, default BS dark might be okay */
- }
+  
 
 
  /* --- Footer --- */
@@ -375,22 +364,14 @@
  body.dark-theme #footer .border-bottom { border-bottom-color: #444 !important; }
  body.dark-theme #footer .text-body-secondary { color: #888 !important; }
 
- /* --- Chatbot --- */
- body.dark-theme #chatbot-container #chatbot-toggle-button { /* Add specific styles if needed */
-    /* Example: */
-    /* background-color: #444; */
-    /* box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5); */
-  }
+ 
  body.dark-theme #chatbot-window { background-color: #282828; border: 1px solid #444; }
  body.dark-theme .chatbot-header { background-color: #333; color: #eee; }
  body.dark-theme #chatbot-messages .message.user { background-color: #3a3a3a; }
  body.dark-theme #chatbot-messages .message.bot { background-color: #4a4a4a; }
  body.dark-theme .chatbot-input-area input { background-color: #333; color: #eee; border: 1px solid #555; }
  body.dark-theme .chatbot-input-area input::placeholder { color: #888; }
- body.dark-theme .chatbot-input-area button { /* Add specific styles if needed */
-     /* Example: */
-     /* color: #ccc; */
-  }
+ 
  body.dark-theme .chatbot-disclaimer { color: #888; }
 
 </style>
