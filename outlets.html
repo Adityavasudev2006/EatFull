@@ -33,8 +33,6 @@
 
 <!-- Your other scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" ...></script>
-<script src="chatbot.js"></script>
-<script src="rank.js"></script> <!-- Make sure rank.js is loaded AFTER Firebase SDKs -->
     <style>
       .filter-section {
     background-color:#fffff2;
@@ -708,26 +706,20 @@
         </footer>
       </div>
     </section>
-    <!-- Chatbot Container -->
 <div id="chatbot-container">
-  <!-- Chatbot Toggle Button -->
   <button id="chatbot-toggle-button" aria-label="Open Chat">
       <i class="fas fa-comment-dots"></i> <!-- Chat icon -->
   </button>
 
-  <!-- Chatbot Window (Initially Hidden) -->
   <div id="chatbot-window">
       <div class="chatbot-header">
           <span>EatFull AI Assistant</span>
           <button id="chatbot-close-button" aria-label="Close Chat">×</button>
       </div>
       <div id="chatbot-messages">
-          <!-- Messages will appear here -->
       </div>
-      <!-- Input area structure is slightly different in your JS, it dynamically adds mic/image buttons -->
       <div class="chatbot-input-area">
           <input type="text" id="chatbot-input" placeholder="Ask a question...">
-          <!-- Mic and Image buttons are added by JS -->
           <button id="chatbot-send-button" aria-label="Send Message">
               <i class="fas fa-paper-plane"></i> <!-- Send icon -->
           </button>
@@ -740,7 +732,6 @@
 
     <!-- Scripts -->
     <script>
-      // Toggle menu for mobile view
       function toggleMenu() {
         const menu = document.querySelector('.navbar-menu');
         menu.classList.toggle('active');
@@ -796,7 +787,6 @@
     </script>
 
     <script>
-      // Search and Filter functionality
       let selectedCategory = 'all';
       let selectedVeg = 'all';
 
@@ -872,8 +862,7 @@
       console.log("Firebase App Initialized (outlets.html)");
     </script>
 
-    <script type="module" src="rank.js"></script>
-<script type="module" src="chatbot.js"></script>
-<script type="module" src="rank.js"></script>
+    <script type="module" src="./AI_Analysis.js"></script>
+    <script type="module" src="chatbot.js"></script>
   </body>
 </html>

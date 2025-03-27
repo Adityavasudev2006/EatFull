@@ -1,10 +1,6 @@
-// --- START CONFIGURATION ---
-// !!! SECURITY WARNING: DO NOT PUT YOUR REAL API KEY HERE FOR A PUBLIC WEBSITE !!!
 const GEMINI_API_KEY = "AIzaSyD0QWnkS7PiYNGV9aKvdF_1ckzVV56A2z8"; // Replace with your actual key
 const GEMINI_MODEL_NAME = "gemini-1.5-flash"; // Or "gemini-pro"
 
-// --- Website Context ---
-// Carefully placed within backticks (template literal)
 const WEBSITE_CONTEXT = `
 You are a helpful AI assistant for a website that sells homemade food. Your goal is to answer user questions based *only* on the following information about the website. If the user asks something not covered here, politely state that you don't have that information or suggest they check the relevant page or contact support. Do not make up information.
 
