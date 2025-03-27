@@ -35,7 +35,7 @@ Website Information:
 -Products we have (Outlets page): Chicken Biriyani,vada,pizza,italian prawn fry,momos,grilled chicken,japanese noodles,veggie salad,meals,paneer tikka,pulka rotti,dosa.
 `; // End of the template literal
 
-// --- Embedded CSS (with Image Upload Support) ---
+// --- Embedded CSS (with Image Upload Support & TTS Button) ---
 const chatbotCSS = `
 /* Chatbot Container Styles */
 #chatbot-container {
@@ -117,6 +117,44 @@ const chatbotCSS = `
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+}
+
+/* Header Title */
+.chatbot-header-title {
+    flex-grow: 1; /* Allow title to take available space */
+    margin-right: 10px; /* Space between title and buttons */
+}
+
+/* Header Buttons Container */
+.chatbot-header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between buttons */
+}
+
+/* TTS Toggle Button */
+#chatbot-tts-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+    font-size: 14px; /* Adjust icon size if needed */
+}
+
+#chatbot-tts-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+#chatbot-tts-button.tts-on {
+    background: rgba(255, 255, 255, 0.4); /* Slightly different background when ON */
+    color: #f0f0f0; /* Slightly different color when ON */
 }
 
 #chatbot-close-button {
@@ -306,6 +344,7 @@ const chatbotCSS = `
     justify-content: center;
     align-items: center;
     transition: all 0.2s ease;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 #chatbot-mic-button:hover {
@@ -332,7 +371,7 @@ const chatbotCSS = `
     justify-content: center;
     align-items: center;
     transition: all 0.2s ease;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 #chatbot-image-button:hover {
@@ -357,26 +396,42 @@ const chatbotCSS = `
 /* Image Upload Preview */
 .image-preview-container {
     position: absolute;
-    bottom: 70px;
-    right: 0;
-    width: 100%;
+    bottom: 70px; /* Adjusted based on typical input area height */
+    left: 16px; /* Align with input area padding */
+    right: 16px; /* Align with input area padding */
     background: white;
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    display: none;
+    display: none; /* Hidden by default */
+    z-index: 10; /* Ensure it's above messages but below input */
+    border: 1px solid #e2e8f0;
+    max-width: calc(100% - 32px); /* Account for padding */
+}
+
+.image-preview-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .image-preview {
-    max-width: 100%;
-    max-height: 150px;
+    max-width: 80px; /* Smaller preview */
+    max-height: 80px;
     border-radius: 6px;
+    object-fit: cover;
+}
+
+.image-preview-filename {
+    flex-grow: 1;
+    font-size: 13px;
+    color: #4a5568;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .remove-image-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
     background: rgba(0,0,0,0.5);
     color: white;
     border: none;
@@ -387,6 +442,9 @@ const chatbotCSS = `
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    flex-shrink: 0;
+    font-size: 14px;
+    line-height: 1;
 }
 
 /* Disclaimer Text */
@@ -419,13 +477,23 @@ const chatbotCSS = `
         right: 5vw;
         bottom: 80px;
     }
-    
+
     .message {
         max-width: 80%;
     }
-    
+
     .image-preview-container {
-        bottom: 60px;
+        bottom: 60px; /* Adjust for smaller screens if needed */
+    }
+
+    .chatbot-header-title {
+        font-size: 15px;
+    }
+
+    #chatbot-tts-button,
+    #chatbot-close-button {
+        width: 26px;
+        height: 26px;
     }
 }
 `;
@@ -441,9 +509,10 @@ function injectChatbotCSS() {
 injectChatbotCSS(); // Inject styles early
 
 // --- DOM Element References ---
-let chatbotToggleButton, chatbotWindow, chatbotCloseButton, chatbotMessages, 
+let chatbotToggleButton, chatbotWindow, chatbotCloseButton, chatbotMessages,
     chatbotInput, chatbotSendButton, chatbotMicButton, chatbotImageButton,
-    chatbotInputArea, chatbotImageInput, imagePreviewContainer;
+    chatbotInputArea, chatbotImageInput, imagePreviewContainer, chatbotHeader,
+    ttsToggleButton; // <<< Added TTS Button reference
 
 // --- Global State ---
 let conversationHistory = [];
@@ -452,10 +521,13 @@ let domReady = false;
 let recognition; // SpeechRecognition instance
 let isRecording = false; // Track recording state
 let currentImageFile = null; // To store the current image file
+let isTTSEnabled = false; // <<< Added TTS state
+let currentUtterance = null; // To hold the current speech utterance
 
 // --- Web Speech API Setup ---
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const speechApiSupported = SpeechRecognition ? true : false;
+const synthesisApiSupported = 'speechSynthesis' in window; // <<< Check for TTS support
 
 // --- Functions ---
 
@@ -471,23 +543,23 @@ function displayMessage(text, type, imageUrl = null) {
 
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', `${type}-message`);
-    
+
     if (text) {
         messageElement.textContent = text;
     }
-    
+
     if (imageUrl) {
         const imgElement = document.createElement('img');
         imgElement.src = imageUrl;
         imgElement.classList.add('message-image');
-        messageElement.appendChild(document.createElement('br'));
+        messageElement.appendChild(document.createElement('br')); // Add space if both text and image
         messageElement.appendChild(imgElement);
     }
-    
+
     if (type === 'typing') {
         messageElement.classList.add('typing-indicator');
     }
-    
+
     chatbotMessages.appendChild(messageElement);
     chatbotMessages.scrollTo({ top: chatbotMessages.scrollHeight, behavior: 'smooth' });
     return messageElement;
@@ -499,27 +571,30 @@ function displayMessage(text, type, imageUrl = null) {
  */
 function handleImageUpload(file) {
     if (!file) return;
-    
+
     // Validate image file
     if (!file.type.match('image.*')) {
         displayMessage("Please upload an image file (JPEG, PNG, etc.)", 'error');
         return;
     }
-    
+
     // Check file size (limit to 5MB)
     if (file.size > 5 * 1024 * 1024) {
         displayMessage("Image size should be less than 5MB", 'error');
         return;
     }
-    
+
     currentImageFile = file;
-    
+
     // Show preview
     const reader = new FileReader();
     reader.onload = (e) => {
         const previewImg = imagePreviewContainer.querySelector('.image-preview');
+        const filenameSpan = imagePreviewContainer.querySelector('.image-preview-filename');
         previewImg.src = e.target.result;
-        imagePreviewContainer.style.display = 'block';
+        filenameSpan.textContent = file.name;
+        imagePreviewContainer.style.display = 'block'; // Show the preview container
+        chatbotInputArea.style.paddingBottom = `${imagePreviewContainer.offsetHeight + 10}px`; // Adjust input area padding
     };
     reader.readAsDataURL(file);
 }
@@ -529,7 +604,55 @@ function handleImageUpload(file) {
  */
 function removeCurrentImage() {
     currentImageFile = null;
-    imagePreviewContainer.style.display = 'none';
+    if (chatbotImageInput) chatbotImageInput.value = ''; // Clear file input
+    imagePreviewContainer.style.display = 'none'; // Hide preview
+    chatbotInputArea.style.paddingBottom = ''; // Reset input area padding
+}
+
+
+/**
+ * Stops any ongoing speech synthesis.
+ */
+function stopSpeech() {
+    if (synthesisApiSupported && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        console.log("Speech synthesis cancelled.");
+    }
+    currentUtterance = null;
+}
+
+/**
+ * Speaks the given text using the browser's TTS engine.
+ * @param {string} text - The text to speak.
+ */
+function speakText(text) {
+    if (!isTTSEnabled || !synthesisApiSupported || !text) {
+        return; // Exit if TTS is off, not supported, or no text
+    }
+
+    stopSpeech(); // Stop any previous speech before starting new
+
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    currentUtterance.lang = 'en-US'; // Optional: set language
+    currentUtterance.rate = 1.0;    // Optional: set speed (0.1 to 10)
+    currentUtterance.pitch = 1.0;   // Optional: set pitch (0 to 2)
+
+    currentUtterance.onerror = (event) => {
+        console.error('SpeechSynthesisUtterance.onerror', event);
+        displayMessage(`Speech synthesis error: ${event.error}`, 'error');
+        currentUtterance = null;
+    };
+
+    currentUtterance.onend = () => {
+        console.log("Speech synthesis finished.");
+        currentUtterance = null;
+    };
+
+    // Delay slightly to ensure the message appears visually first
+    setTimeout(() => {
+        window.speechSynthesis.speak(currentUtterance);
+        console.log("Speaking:", text.substring(0, 50) + "...");
+    }, 100); // Small delay
 }
 
 /**
@@ -541,12 +664,16 @@ async function handleSendMessage() {
     const userInput = chatbotInput.value.trim();
     if (!userInput && !currentImageFile) return;
 
+    stopSpeech(); // Stop any currently playing speech when user sends a new message
+
     // Display user message with image if available
     let imageUrl = null;
+    let displayedUserText = userInput || "📷 Image Uploaded";
     if (currentImageFile) {
+        // Create a temporary URL for display purposes ONLY
         imageUrl = URL.createObjectURL(currentImageFile);
     }
-    displayMessage(userInput || "📷 Image", 'user', imageUrl);
+    displayMessage(userInput, 'user', imageUrl); // Pass actual user text for display
 
     // Prepare message for history
     const userMessage = {
@@ -558,17 +685,22 @@ async function handleSendMessage() {
         userMessage.parts.push({ text: userInput });
     }
 
+    // Handle image for API
+    let base64Image = null;
+    let imageMimeType = null;
     if (currentImageFile) {
+        imageMimeType = currentImageFile.type;
         // Convert image to base64 for API
-        const base64Image = await new Promise((resolve) => {
+        base64Image = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = (error) => reject(error);
             reader.readAsDataURL(currentImageFile);
         });
-        
+
         userMessage.parts.push({
             inlineData: {
-                mimeType: currentImageFile.type,
+                mimeType: imageMimeType,
                 data: base64Image
             }
         });
@@ -577,9 +709,9 @@ async function handleSendMessage() {
     conversationHistory.push(userMessage);
     chatbotInput.value = '';
     const typingIndicator = displayMessage("Thinking", 'typing');
-    removeCurrentImage(); // Clear image after sending
+    removeCurrentImage(); // Clear image preview *after* processing it for the API
 
-    // Prepare payload with image support
+    // --- API Call Logic (mostly unchanged) ---
     const requestPayload = {
         contents: [
             {
@@ -590,7 +722,7 @@ async function handleSendMessage() {
                 role: "model",
                 parts: [{ text: "Okay, I understand. I will answer questions based only on the provided website information. How can I help?" }]
             },
-            ...conversationHistory.slice(-20)
+            ...conversationHistory.slice(-20) // Keep context, adjust history size if needed
         ],
         safetySettings: [
             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
@@ -599,7 +731,7 @@ async function handleSendMessage() {
             { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
         ],
         generationConfig: {
-            temperature: 0.7, topK: 1, topP: 1, maxOutputTokens: 256,
+            temperature: 0.7, topK: 1, topP: 1, maxOutputTokens: 256, // Adjust tokens if needed
         },
     };
 
@@ -622,7 +754,7 @@ async function handleSendMessage() {
             } catch (e) {}
             console.error("API Error Response Status:", response.status, "Body:", await response.text().catch(() => "Could not read error body"));
             displayMessage(errorMsg, 'error');
-            conversationHistory.pop();
+            conversationHistory.pop(); // Remove the failed user message from history
             return;
         }
 
@@ -630,18 +762,27 @@ async function handleSendMessage() {
 
         let botResponse = "Sorry, I couldn't get a response.";
         if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
-            botResponse = data.candidates[0].content.parts[0].text;
+            // Check for valid text response part
+            const textPart = data.candidates[0].content.parts.find(part => part.text);
+            if (textPart) {
+                botResponse = textPart.text;
 
-            if (data.candidates[0].finishReason && data.candidates[0].finishReason !== "STOP") {
-                botResponse = `Response stopped: ${data.candidates[0].finishReason}. I cannot provide an answer due to safety settings or other limitations.`;
-                console.warn("Gemini Response Finish Reason:", data.candidates[0].finishReason, data.candidates[0].safetyRatings);
+                if (data.candidates[0].finishReason && data.candidates[0].finishReason !== "STOP") {
+                    botResponse = `Response stopped: ${data.candidates[0].finishReason}. I cannot provide a complete answer due to safety settings or other limitations.`;
+                    console.warn("Gemini Response Finish Reason:", data.candidates[0].finishReason, data.candidates[0].safetyRatings);
+                }
+            } else {
+                console.warn("Received candidate but no text part found:", data.candidates[0]);
+                botResponse = "Received a response format I couldn't process.";
             }
+
         } else if (data.promptFeedback && data.promptFeedback.blockReason) {
             botResponse = `I cannot process that request due to safety guidelines (Reason: ${data.promptFeedback.blockReason}).`;
             console.warn("Gemini Prompt Blocked:", data.promptFeedback.blockReason, data.promptFeedback.safetyRatings);
+            // Display the block reason, but don't add user message to history if it was blocked
             displayMessage(botResponse, 'bot');
-            conversationHistory.pop();
-            return;
+            conversationHistory.pop(); // Remove the blocked user message
+            return; // Don't proceed to speak or add bot response to history
         } else {
             console.error("Unexpected API response structure:", data);
             botResponse = "Received an unexpected response format from the API.";
@@ -650,15 +791,33 @@ async function handleSendMessage() {
         displayMessage(botResponse, 'bot');
         conversationHistory.push({ role: "model", parts: [{ text: botResponse }] });
 
+        // >>>>> TTS Integration Point <<<<<
+        speakText(botResponse);
+        // >>>>> End TTS Integration Point <<<<<
+
+
+        // Simple history management: keep last N turns (1 user + 1 bot = 1 turn)
+        // Max 20 items = 10 turns approx.
         if (conversationHistory.length > 20) {
-            conversationHistory = conversationHistory.slice(-20);
+            // Keep the system prompt + the last 18 messages (9 turns)
+             conversationHistory = [
+                conversationHistory[0], // System user prompt
+                conversationHistory[1], // System model response
+                ...conversationHistory.slice(-18)
+            ];
         }
+
 
     } catch (error) {
         console.error("Network or other error during API call:", error);
         if(typingIndicator) chatbotMessages.removeChild(typingIndicator);
         displayMessage(`Error communicating with the AI service: ${error.message}`, 'error');
-        conversationHistory.pop();
+        conversationHistory.pop(); // Remove the failed user message
+    } finally {
+         // Clean up the temporary object URL for the displayed image
+        if (imageUrl) {
+            URL.revokeObjectURL(imageUrl);
+        }
     }
 }
 
@@ -671,9 +830,10 @@ function toggleChatbot() {
     if (isChatbotOpen) {
         chatbotInput.focus();
     } else {
+        stopSpeech(); // Stop speech when closing the chat
         // Stop recognition if window is closed while recording
         if (isRecording && recognition) {
-            recognition.stop();
+            recognition.abort(); // Use abort to prevent 'no-speech' error potentially
             isRecording = false;
             if (chatbotMicButton) {
                 chatbotMicButton.classList.remove('recording');
@@ -690,6 +850,7 @@ function setupVoiceInput() {
     if (!speechApiSupported || !domReady) {
         if (!speechApiSupported) console.warn("Speech Recognition API not supported by this browser.");
         if (!domReady) console.warn("DOM not ready for voice input setup.");
+        // Optionally hide or disable the mic button if not supported
         return;
     }
 
@@ -698,12 +859,13 @@ function setupVoiceInput() {
     chatbotMicButton.id = 'chatbot-mic-button';
     chatbotMicButton.type = 'button';
     chatbotMicButton.setAttribute('aria-label', 'Start voice input');
-    chatbotMicButton.innerHTML = '<i class="fas fa-microphone"></i>';
+    chatbotMicButton.innerHTML = '<i class="fas fa-microphone"></i>'; // Ensure Font Awesome is loaded
 
-    // Insert mic button in the input area
+    // Insert mic button in the input area (before send button)
     if (chatbotInputArea && chatbotSendButton) {
+         // Insert before the send button
         chatbotInputArea.insertBefore(chatbotMicButton, chatbotSendButton);
-        chatbotMicButton.style.display = 'inline-flex';
+        chatbotMicButton.style.display = 'inline-flex'; // Make sure it's visible
     } else {
         console.error("Cannot add mic button: Input area or send button not found.");
         return;
@@ -720,10 +882,13 @@ function setupVoiceInput() {
         const speechResult = event.results[0][0].transcript;
         chatbotInput.value = speechResult;
         console.log('Speech recognized:', speechResult);
+        // Optional: Automatically send after recognition?
+        // handleSendMessage();
     };
 
     recognition.onspeechend = () => {
-        if (isRecording) recognition.stop();
+        // No need to explicitly stop here if continuous is false
+        console.log('Speech end detected.');
     };
 
     recognition.onstart = () => {
@@ -734,7 +899,8 @@ function setupVoiceInput() {
     };
 
     recognition.onend = () => {
-        if (isRecording) {
+        // This fires naturally after speech stops or if stop()/abort() is called
+        if (isRecording) { // Only update UI if it was actively recording
             isRecording = false;
             chatbotMicButton.classList.remove('recording');
             chatbotMicButton.setAttribute('aria-label', 'Start voice input');
@@ -750,13 +916,15 @@ function setupVoiceInput() {
             case 'audio-capture': errorMessage = 'Microphone problem. Ensure it is connected and enabled.'; break;
             case 'not-allowed': errorMessage = 'Microphone access denied. Please allow access in browser settings.'; break;
             case 'network': errorMessage = 'Network error during voice recognition.'; break;
-            case 'aborted': errorMessage = 'Voice recognition stopped.'; break;
+            case 'aborted': errorMessage = 'Voice recognition cancelled.'; break; // Don't show error for manual stop/abort
             case 'service-not-allowed': errorMessage = 'Browser or OS blocked speech service.'; break;
             default: errorMessage = `Error: ${event.error}`;
         }
+        // Only display error if it wasn't an intentional abort
         if (event.error !== 'aborted') {
             displayMessage(errorMessage, 'error');
         }
+         // Ensure UI resets correctly on error
         if (isRecording) {
             isRecording = false;
             chatbotMicButton.classList.remove('recording');
@@ -769,129 +937,256 @@ function setupVoiceInput() {
         if (!recognition) return;
 
         if (isRecording) {
-            recognition.stop();
+            recognition.stop(); // User manually stops recording
         } else {
-            try {
-                if (navigator.permissions && navigator.permissions.query) {
-                    navigator.permissions.query({ name: 'microphone' }).then((permissionStatus) => {
-                        if (permissionStatus.state === 'granted' || permissionStatus.state === 'prompt') {
-                            recognition.start();
-                        } else if (permissionStatus.state === 'denied') {
-                            displayMessage('Microphone access previously denied. Please allow access in browser settings.', 'error');
-                        }
-                        permissionStatus.onchange = () => {
-                            console.log("Mic permission state changed to:", permissionStatus.state);
-                        };
-                    }).catch(err => {
-                        console.warn("Microphone permission query failed, proceeding to start recognition directly.", err);
+            // Request microphone permission explicitly if possible/needed
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                     // Permission granted, start recognition
+                    try {
                         recognition.start();
-                    });
-                } else {
-                    console.log("Permissions API not fully supported, starting recognition directly.");
-                    recognition.start();
-                }
-            } catch(err) {
-                console.error("Error initiating recognition:", err);
-                displayMessage(`Could not start voice recognition: ${err.message}`, 'error');
-                isRecording = false;
-                chatbotMicButton.classList.remove('recording');
-                chatbotMicButton.setAttribute('aria-label', 'Start voice input');
-            }
+                         // Important: Stop the tracks immediately after permission check if not needed continuously
+                        stream.getTracks().forEach(track => track.stop());
+                    } catch(err) {
+                        console.error("Error starting recognition after getUserMedia:", err);
+                        displayMessage(`Could not start voice recognition: ${err.message}`, 'error');
+                         // Clean up tracks even if start fails
+                         stream.getTracks().forEach(track => track.stop());
+                    }
+                })
+                .catch(err => {
+                    console.error("Microphone access denied or error:", err);
+                    // Map common errors to user-friendly messages
+                    let permErrorMessage = 'Could not access microphone.';
+                    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                        permErrorMessage = 'Microphone access denied. Please allow access in browser settings.';
+                    } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+                        permErrorMessage = 'No microphone found. Please ensure it is connected.';
+                    } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+                         permErrorMessage = 'Microphone is already in use or cannot be accessed.';
+                    }
+                    displayMessage(permErrorMessage, 'error');
+                     // Ensure UI state is correct
+                    isRecording = false;
+                    if(chatbotMicButton) {
+                        chatbotMicButton.classList.remove('recording');
+                        chatbotMicButton.setAttribute('aria-label', 'Start voice input');
+                    }
+                });
         }
     });
 
     console.log("Voice input setup complete.");
 }
 
+
 /** Sets up image upload functionality */
 function setupImageUpload() {
+    if (!domReady || !chatbotInputArea || !chatbotWindow) {
+         console.error("DOM not ready or required elements missing for image upload setup.");
+         return;
+    }
+
     // Create image upload button
     chatbotImageButton = document.createElement('button');
     chatbotImageButton.id = 'chatbot-image-button';
     chatbotImageButton.type = 'button';
     chatbotImageButton.setAttribute('aria-label', 'Upload image');
-    chatbotImageButton.innerHTML = '<i class="fas fa-image"></i>';
-    
+    chatbotImageButton.innerHTML = '<i class="fas fa-image"></i>'; // Ensure Font Awesome is loaded
+
     // Create hidden file input
     chatbotImageInput = document.createElement('input');
     chatbotImageInput.id = 'chatbot-image-input';
     chatbotImageInput.type = 'file';
     chatbotImageInput.accept = 'image/*';
     chatbotImageInput.style.display = 'none';
-    
+
     // Create image preview container
     imagePreviewContainer = document.createElement('div');
     imagePreviewContainer.className = 'image-preview-container';
     imagePreviewContainer.innerHTML = `
-        <button class="remove-image-button">&times;</button>
-        <img class="image-preview" src="" alt="Image preview">
+        <div class="image-preview-content">
+            <img class="image-preview" src="" alt="Image preview">
+            <span class="image-preview-filename"></span>
+            <button class="remove-image-button" aria-label="Remove image">×</button>
+        </div>
     `;
-    
+
     // Insert elements into DOM
-    chatbotInputArea.insertBefore(chatbotImageButton, chatbotMicButton);
-    chatbotInputArea.appendChild(chatbotImageInput);
-    chatbotWindow.appendChild(imagePreviewContainer);
-    
+    // Order: Image Button -> Mic Button -> Send Button
+    if (chatbotMicButton) {
+        chatbotInputArea.insertBefore(chatbotImageButton, chatbotMicButton);
+    } else if (chatbotSendButton) {
+         // Fallback if mic button failed to initialize
+         chatbotInputArea.insertBefore(chatbotImageButton, chatbotSendButton);
+    } else {
+         // Fallback if both failed (unlikely)
+         chatbotInputArea.appendChild(chatbotImageButton);
+    }
+
+    chatbotInputArea.appendChild(chatbotImageInput); // Input itself can go at the end
+    chatbotInputArea.appendChild(imagePreviewContainer); // Append preview inside input area
+
     // Event listeners
     chatbotImageButton.addEventListener('click', () => chatbotImageInput.click());
     chatbotImageInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
+        if (e.target.files && e.target.files.length > 0) {
             handleImageUpload(e.target.files[0]);
         }
     });
-    
+
     imagePreviewContainer.querySelector('.remove-image-button').addEventListener('click', removeCurrentImage);
-    
-    // Drag and drop support
+
+    // Drag and drop support onto the *input area* or maybe whole window? Let's do window.
     chatbotWindow.addEventListener('dragover', (e) => {
         e.preventDefault();
-        chatbotWindow.classList.add('drag-over');
+        // Optional: Add a visual cue
+        chatbotWindow.style.outline = '2px dashed #aaa';
     });
-    
-    chatbotWindow.addEventListener('dragleave', () => {
-        chatbotWindow.classList.remove('drag-over');
-    });
-    
-    chatbotWindow.addEventListener('drop', (e) => {
-        e.preventDefault();
-        chatbotWindow.classList.remove('drag-over');
-        if (e.dataTransfer.files.length) {
-            handleImageUpload(e.dataTransfer.files[0]);
+
+    chatbotWindow.addEventListener('dragleave', (e) => {
+        // Make sure dragleave isn't triggered by entering a child element
+        if (!chatbotWindow.contains(e.relatedTarget)) {
+            chatbotWindow.style.outline = 'none';
         }
     });
+
+    chatbotWindow.addEventListener('drop', (e) => {
+        e.preventDefault();
+        chatbotWindow.style.outline = 'none';
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleImageUpload(e.dataTransfer.files[0]);
+            // Bring window to focus maybe?
+            chatbotInput.focus();
+        }
+    });
+     console.log("Image upload setup complete.");
+}
+
+
+/** Sets up the Text-to-Speech toggle button */
+function setupTTSButton() {
+    if (!synthesisApiSupported || !domReady || !chatbotHeader) {
+        if (!synthesisApiSupported) console.warn("Speech Synthesis API not supported by this browser. TTS button disabled.");
+        if (!domReady || !chatbotHeader) console.error("DOM not ready or header missing for TTS setup.");
+        return; // Don't add the button if not supported or DOM not ready
+    }
+
+    // Create TTS Button
+    ttsToggleButton = document.createElement('button');
+    ttsToggleButton.id = 'chatbot-tts-button';
+    ttsToggleButton.type = 'button';
+    ttsToggleButton.setAttribute('aria-label', 'Enable response voice');
+    ttsToggleButton.innerHTML = '<i class="fas fa-volume-mute"></i>'; // Default: OFF (Muted icon)
+
+    // Get or create a container for header buttons
+    let headerButtonsContainer = chatbotHeader.querySelector('.chatbot-header-buttons');
+    if (!headerButtonsContainer) {
+        headerButtonsContainer = document.createElement('div');
+        headerButtonsContainer.className = 'chatbot-header-buttons';
+        // Append it before the close button if it exists, otherwise at the end
+        if (chatbotCloseButton) {
+            chatbotHeader.insertBefore(headerButtonsContainer, chatbotCloseButton);
+        } else {
+            chatbotHeader.appendChild(headerButtonsContainer);
+        }
+    }
+
+    // Add TTS button to the buttons container
+    headerButtonsContainer.appendChild(ttsToggleButton);
+
+    // Add event listener for toggling
+    ttsToggleButton.addEventListener('click', () => {
+        isTTSEnabled = !isTTSEnabled; // Toggle the state
+
+        if (isTTSEnabled) {
+            ttsToggleButton.innerHTML = '<i class="fas fa-volume-up"></i>'; // ON Icon
+            ttsToggleButton.classList.add('tts-on');
+            ttsToggleButton.setAttribute('aria-label', 'Disable response voice');
+            console.log("TTS Enabled");
+            // Optional: Speak a confirmation?
+            // speakText("Voice enabled.");
+        } else {
+            ttsToggleButton.innerHTML = '<i class="fas fa-volume-mute"></i>'; // OFF Icon
+            ttsToggleButton.classList.remove('tts-on');
+            ttsToggleButton.setAttribute('aria-label', 'Enable response voice');
+            stopSpeech(); // Stop speaking immediately if turned off
+            console.log("TTS Disabled");
+        }
+    });
+
+    console.log("TTS Button setup complete.");
 }
 
 /** Initializes the chatbot elements and event listeners. */
 function initializeChatbot() {
-    // Find DOM Elements
+    // Dynamically create Chatbot HTML Structure
+    const chatbotContainer = document.createElement('div');
+    chatbotContainer.id = 'chatbot-container';
+
+    // Assume Font Awesome is loaded externally (e.g., via CDN in your main HTML)
+    chatbotContainer.innerHTML = `
+        <button id="chatbot-toggle-button" aria-label="Open Chat">
+            <i class="fas fa-comment-dots"></i>
+        </button>
+        <div id="chatbot-window">
+            <div class="chatbot-header">
+                 <span class="chatbot-header-title">Chef AI Assistant</span>
+                 <div class="chatbot-header-buttons">
+                     <!-- TTS button will be added here by setupTTSButton -->
+                 </div>
+                <button id="chatbot-close-button" aria-label="Close Chat">×</button>
+            </div>
+            <div id="chatbot-messages">
+                <!-- Messages will be appended here -->
+            </div>
+             <div class="chatbot-input-area">
+                 <!-- Image Preview will be added here by setupImageUpload -->
+                 <input type="text" id="chatbot-input" placeholder="Type message or ask...">
+                 <!-- Image button will be added here by setupImageUpload -->
+                 <!-- Mic button will be added here by setupVoiceInput -->
+                 <button id="chatbot-send-button" aria-label="Send Message">
+                     <i class="fas fa-paper-plane"></i>
+                 </button>
+             </div>
+             <div class="chatbot-disclaimer">AI responses may be approximate.</div>
+        </div>
+    `;
+    document.body.appendChild(chatbotContainer);
+
+
+    // Find DOM Elements after creation
     chatbotToggleButton = document.getElementById('chatbot-toggle-button');
     chatbotWindow = document.getElementById('chatbot-window');
+    chatbotHeader = chatbotWindow.querySelector('.chatbot-header'); // <<< Find header
     chatbotCloseButton = document.getElementById('chatbot-close-button');
     chatbotMessages = document.getElementById('chatbot-messages');
     chatbotInput = document.getElementById('chatbot-input');
     chatbotSendButton = document.getElementById('chatbot-send-button');
-    chatbotInputArea = document.querySelector('.chatbot-input-area');
+    chatbotInputArea = chatbotWindow.querySelector('.chatbot-input-area');
+
 
     // Check if all critical elements were found
-    if (!chatbotToggleButton || !chatbotWindow || !chatbotCloseButton || !chatbotMessages || 
+    if (!chatbotToggleButton || !chatbotWindow || !chatbotHeader || !chatbotCloseButton || !chatbotMessages ||
         !chatbotInput || !chatbotSendButton || !chatbotInputArea) {
-        console.error("Chatbot initialization failed: Required elements not found.");
-        if(chatbotToggleButton) chatbotToggleButton.style.display = 'none';
+        console.error("Chatbot initialization failed: Required elements not found after creation.");
+        if(chatbotToggleButton) chatbotToggleButton.style.display = 'none'; // Hide toggle if setup failed
         return;
     }
 
-    domReady = true;
-    
-    // Setup all features
-    setupVoiceInput();
-    setupImageUpload();
+    domReady = true; // Mark DOM as ready
 
-    // Event Listeners
+    // Setup all features IN ORDER (dependency matters for insertion point)
+    setupTTSButton();      // Needs header
+    setupVoiceInput();     // Needs input area & send button
+    setupImageUpload();    // Needs input area, window, and potentially mic button
+
+    // --- Event Listeners ---
     chatbotToggleButton.addEventListener('click', toggleChatbot);
     chatbotCloseButton.addEventListener('click', toggleChatbot);
     chatbotSendButton.addEventListener('click', handleSendMessage);
     chatbotInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) { // Send on Enter, allow Shift+Enter for newline
             event.preventDefault();
             handleSendMessage();
         }
@@ -899,17 +1194,35 @@ function initializeChatbot() {
 
     // Initial greeting
     const initialGreeting = "Hi there! How can I help you navigate our homemade food website today?";
-    if (!chatbotMessages.querySelector('.bot-message')) {
-        displayMessage(initialGreeting, 'bot');
+    // Ensure message area is clear before adding greeting (if re-initializing)
+    while (chatbotMessages.firstChild) {
+        chatbotMessages.removeChild(chatbotMessages.firstChild);
     }
-    conversationHistory = [{ role: "model", parts: [{ text: initialGreeting }] }];
+    displayMessage(initialGreeting, 'bot');
 
-    console.log("Chatbot initialized. Speech API Supported:", speechApiSupported);
+    // Initialize conversation history with system prompts and greeting
+    conversationHistory = [
+         {
+            role: "user",
+            parts: [{ text: `System Instruction: ${WEBSITE_CONTEXT}\n\nOkay, now answer the following user question based *only* on the information provided above.` }]
+        },
+        {
+            role: "model",
+            parts: [{ text: "Okay, I understand. I will answer questions based only on the provided website information. How can I help?" }]
+        },
+        { role: "model", parts: [{ text: initialGreeting }] } // Add initial greeting to history
+    ];
+
+
+    console.log("Chatbot initialized.");
+    console.log("Speech Recognition Supported:", speechApiSupported);
+    console.log("Speech Synthesis Supported:", synthesisApiSupported);
 }
 
 // --- Wait for DOM ready before initializing ---
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeChatbot);
 } else {
+    // DOM is already loaded
     initializeChatbot();
 }
