@@ -175,7 +175,10 @@ function displayCart() {
     `;
     cartContainer.appendChild(totalElement);
 }
-
+function rld()
+{
+    window.location.reload(true);
+}
 async function removeFromCart(index) {
     if (index >= 0 && index < cartItems.length) {
         // Remove the item from the cart array
@@ -188,7 +191,9 @@ async function removeFromCart(index) {
         await updateFirebaseCart();
         
         // Refresh the cart display
+        rld();
         displayCart();
+        rld();
     }
 }
 
