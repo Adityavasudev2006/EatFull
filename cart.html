@@ -27,127 +27,23 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-      /* Scoped CSS to prevent affecting navbar - Original */
-      .cart-container {
-          max-width: 800px;
-          margin: 20px auto;
-          padding: 20px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          background-color: #f8f9fa; /* Light mode default */
-      }
-      .cart-header, .cart-footer {
-          text-align: center;
-          font-weight: bold;
-      }
-      .cart-items {
-          margin-bottom: 20px;
-      }
-  
-      /* --- Theme Toggle Button Styles --- */
-      #theme-toggle-button {
-        position: fixed; top: 50%; right: 0; transform: translateY(-50%);
-        background-color: #3498db; color: white; border: none; padding: 12px 10px;
-        border-top-left-radius: 15px; border-bottom-left-radius: 15px; cursor: pointer;
-        z-index: 1050; box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2); transition: background-color 0.3s ease;
-        display: flex; align-items: center; justify-content: center; width: 45px; height: 50px;
-      }
-      #theme-toggle-button:hover { background-color: #2980b9; }
-      #theme-toggle-button i { font-size: 1.4em; }
-  
-      /* --- Dark Theme Global Styles --- */
-      body.dark-theme {
-         background-color: #1a1a1a !important; /* Override inline style if present */
-         color: #e0e0e0;
-      }
-  
-      /* --- Navbar (Dark Theme) --- */
-      body.dark-theme .navbar { background-color: #111; border-bottom: 1px solid #333; }
-      body.dark-theme .navbar .logo,
-      body.dark-theme .navbar-menu a { color: #d0d0d0; }
-      body.dark-theme .navbar-menu a:hover { color: #5dade2; }
-      body.dark-theme .navbar-menu a::after { background-color: #5dade2; }
-      body.dark-theme .dropdown-menu { background-color: #222; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); }
-      body.dark-theme .dropdown-menu a { color: #d0d0d0; }
-      body.dark-theme .dropdown-menu a:hover { background-color: #333; color: #fff; }
-      body.dark-theme .search-form input { background-color: #333; color: #eee; border: 1px solid #555; }
-      body.dark-theme .search-form input::placeholder { color: #888; }
-      body.dark-theme .search-form button { background-color: #5dade2; border-color: #5dade2; }
-      body.dark-theme .search-form button:hover { background-color: #76c7f0; border-color: #76c7f0; }
-      body.dark-theme .navbar-menu { background-color: #222; } /* For mobile */
-  
-      /* --- Cart Page Specific Dark Styles --- */
-      body.dark-theme #heading h1 { color: #e8e8e8; }
-      body.dark-theme #heading hr { border-top-color: #444; opacity: 0.5; color: #444;} /* Added color fallback */
-      body.dark-theme .cart-container { background-color: #2c2c2c; border-color: #444; } /* Styles for original cart container class */
-  
-      /* Cart Summary Section (Dark) */
-      body.dark-theme .order-md-last h4 span.text-primary { color: #5dade2 !important; }
-      body.dark-theme .order-md-last h4 { color: #e0e0e0; }
-      body.dark-theme .order-md-last .badge.bg-primary { background-color: #5dade2 !important; color: #111; }
-      body.dark-theme .list-group-item { background-color: #2c2c2c; border-color: #444; color: #c0c0c0; }
-      body.dark-theme .list-group-item h6 { color: #e8e8e8; }
-      body.dark-theme .list-group-item .text-body-secondary { color: #888 !important; }
-      body.dark-theme .list-group-item.bg-body-tertiary { background-color: #383838 !important; }
-      body.dark-theme .list-group-item .text-success { color: #47a447 !important; } /* Brighter green */
-      body.dark-theme .list-group-item span#total-amount { color: #eee; } /* Ensure total amount is bright */
-      body.dark-theme .list-group-item #cart-items2 strong { color: #eee; } /* Specifically target the strong tag */
-      body.dark-theme .list-group-item button.btn-secondary svg { color: #ccc; }
-      body.dark-theme .list-group-item button.btn-secondary { background-color: #555; border-color: #666;}
-      body.dark-theme .list-group-item button.btn-secondary:hover { background-color: #666; border-color: #777;}
-  
-  
-      /* Promo Code Form (Dark) */
-      body.dark-theme .card { background-color: #2c2c2c; border: 1px solid #444; }
-      body.dark-theme .card .form-control { background-color: #333; color: #eee; border-color: #555; }
-      body.dark-theme .card .form-control::placeholder { color: #888; }
-      body.dark-theme .card .btn-secondary { background-color: #6c757d; border-color: #6c757d; color: #eee;}
-      body.dark-theme .card .btn-secondary:hover { background-color: #5a6268; border-color: #545b62;}
-  
-      /* Billing Address Form (Dark) */
-      body.dark-theme .col-md-7 h4 { color: #e0e0e0; } /* Target the Billing Address heading */
-      body.dark-theme form label { color: #ccc; }
-      body.dark-theme form .form-control,
-      body.dark-theme form .form-select {
-          background-color: #333;
-          color: #eee;
-          border-color: #555;
-      }
-      body.dark-theme form .form-control::placeholder { color: #888; }
-      body.dark-theme form .input-group-text {
-          background-color: #444;
-          border-color: #555;
-          color: #ccc;
-      }
-      body.dark-theme form .form-check-input {
-          background-color: #444;
-          border-color: #666;
-      }
-      body.dark-theme form .form-check-input:checked {
-          background-color: #5dade2;
-          border-color: #5dade2;
-      }
-      body.dark-theme form .invalid-feedback { color: #f9a0a0; } /* Lighter red */
-      body.dark-theme form hr { border-top-color: #444; opacity: 0.5; color: #444;} /* Added color fallback */
-      body.dark-theme form .btn-primary { background-color: #5dade2; border-color: #5dade2; color: #111; } /* Checkout button */
-      body.dark-theme form .btn-primary:hover { background-color: #76c7f0; border-color: #76c7f0; }
-  
-      /* --- Footer (Dark) --- */
-      body.dark-theme #footer { background-color: #1a1a1a; }
-      body.dark-theme #footer .nav-link { color: #a0a0a0; }
-      body.dark-theme #footer .nav-link:hover { color: #ccc; }
-      body.dark-theme #footer .border-bottom { border-bottom-color: #444 !important; }
-      body.dark-theme #footer .text-body-secondary { color: #888 !important; }
-  
-      /* --- Chatbot (Dark) --- */
-      body.dark-theme #chatbot-window { background-color: #282828; border: 1px solid #444; }
-      body.dark-theme .chatbot-header { background-color: #333; color: #eee; }
-      body.dark-theme #chatbot-messages .message.user { background-color: #3a3a3a; }
-      body.dark-theme #chatbot-messages .message.bot { background-color: #4a4a4a; }
-      body.dark-theme .chatbot-input-area input { background-color: #333; color: #eee; border: 1px solid #555; }
-      body.dark-theme .chatbot-input-area input::placeholder { color: #888; }
-      body.dark-theme .chatbot-disclaimer { color: #888; }
-  </style>
+        /* Scoped CSS to prevent affecting navbar */
+        .cart-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .cart-header, .cart-footer {
+            text-align: center;
+            font-weight: bold;
+        }
+        .cart-items {
+            margin-bottom: 20px;
+        }
+    </style>
   </head>
 
   <body>
@@ -331,7 +227,7 @@
                       type="text"
                       class="form-control"
                       id="address"
-                      placeholder="1234 Main St"
+                      placeholder="Anna Nagar Chennai"
                       required=""
                     />
                     <div class="invalid-feedback">
@@ -348,7 +244,7 @@
                       type="text"
                       class="form-control"
                       id="address2"
-                      placeholder="Apartment or suite"
+                      placeholder="Vit Chennai"
                     />
                   </div>
 
@@ -356,7 +252,10 @@
                     <label for="country" class="form-label">Country</label>
                     <select class="form-select" id="country" required="">
                       <option value="">Choose...</option>
-                      <option>United States</option>
+                      <option>India</option>
+                      <option>USA</option>
+                      <option>Canada</option>
+                      <option>Australia</option>
                     </select>
                     <div class="invalid-feedback">
                       Please select a valid country.
@@ -367,7 +266,10 @@
                     <label for="state" class="form-label">State</label>
                     <select class="form-select" id="state" required="">
                       <option value="">Choose...</option>
-                      <option>California</option>
+                      <option>Tamil Nadu</option>
+                      <option>Andhra Pradesh</option>
+                      <option>Kerala</option>
+                      <option>Karnataka</option>
                     </select>
                     <div class="invalid-feedback">
                       Please provide a valid state.
@@ -550,11 +452,35 @@
       </div>
       <div id="cart-items">0</div>
     </section>
+    <!-- Chatbot Container -->
+<div id="chatbot-container">
+  <!-- Chatbot Toggle Button -->
+  <button id="chatbot-toggle-button" aria-label="Open Chat">
+      <i class="fas fa-comment-dots"></i> <!-- Chat icon -->
+  </button>
 
-<button id="theme-toggle-button" aria-label="Toggle Theme">
-  <i id="theme-icon" class="fas fa-sun"></i> <!-- Initial icon -->
-</button>
-
+  <!-- Chatbot Window (Initially Hidden) -->
+  <div id="chatbot-window">
+      <div class="chatbot-header">
+          <span>EatFull AI Assistant</span>
+          <button id="chatbot-close-button" aria-label="Close Chat">×</button>
+      </div>
+      <div id="chatbot-messages">
+          <!-- Messages will appear here -->
+      </div>
+      <!-- Input area structure is slightly different in your JS, it dynamically adds mic/image buttons -->
+      <div class="chatbot-input-area">
+          <input type="text" id="chatbot-input" placeholder="Ask a question...">
+          <!-- Mic and Image buttons are added by JS -->
+          <button id="chatbot-send-button" aria-label="Send Message">
+              <i class="fas fa-paper-plane"></i> <!-- Send icon -->
+          </button>
+      </div>
+      <div class="chatbot-disclaimer">
+         AI responses may not always be perfect.
+     </div>
+  </div>
+</div>
   <script>
     // Access the cartItems array from localStorage
     let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -638,7 +564,7 @@
                   const itemDiv1 = document.createElement('div');
                   itemDiv1.classList.add('cart-item1');
 
-                itemDiv2.innerHTML =`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${totalAmount}`
+                itemDiv2.innerHTML =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${totalAmount}
                 cartContainer1.appendChild(itemDiv1);
                 cartContainer2.appendChild(itemDiv2);
             // Update total items and total amount
@@ -665,6 +591,5 @@
     ></script>
     <script type="module" src="./cart.js"></script>
 <script src="chatbot.js"></script>
-<script src="theme.js"></script>
   </body>
 </html>
