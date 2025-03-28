@@ -1,7 +1,13 @@
 // Import Firebase SDK modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { 
+    getFirestore, 
+    doc, 
+    getDoc, 
+    updateDoc, 
+    arrayUnion 
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -14,10 +20,11 @@ const firebaseConfig = {
   measurementId: "G-MX9XXLXTVS"
 };
 
+
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 let currentUser = null;
 let cartItems = [];
 let isInitialLoad = true;
@@ -213,7 +220,117 @@ async function addToCart(item) {
     displayCart();
 }
 
-// Make functions available globally
+function getLocationDetails() {
+
+    const address = document.getElementById('address').value;
+    const country = document.getElementById('country').value;
+    const state = document.getElementById('state').value;
+    const zip = document.getElementById('zip').value;
+
+    return {
+        
+        address,
+        country,
+        state,
+        zip,
+        
+    };
+}
+
+async function checkoutCart() {
+    if (!currentUser) {
+        alert('Please log in to complete checkout.');
+        return false;
+    }
+
+    if (cartItems.length === 0) {
+        alert('Your cart is empty.');
+        return false;
+    }
+
+    try {
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            
+            // Get current timestamp
+            const checkoutTimestamp = new Date().toISOString();
+
+            // Prepare cart items with timestamp
+            const cartItemsWithTimestamp = cartItems.map(item => ({
+                ...item,
+                checkoutTimestamp: checkoutTimestamp
+            }));
+
+            // Explicitly create location details object
+            const locationDetails = {
+                address: document.getElementById('address').value,
+                country: document.getElementById('country').value,
+                state: document.getElementById('state').value,
+                zip: document.getElementById('zip').value
+            };
+
+            // Merge existing bought items with new items
+            const updatedBoughtItems = userData.items_bought_name 
+                ? [...userData.items_bought_name, ...cartItemsWithTimestamp]
+                : cartItemsWithTimestamp;
+
+            // Update Firestore document
+            await updateDoc(userDocRef, {
+                items_bought_name: updatedBoughtItems,
+                itemsInCart: [],
+                numberOfCartItems: 0,
+                locations: locationDetails // Directly set, not using arrayUnion
+            });
+        }
+
+        // Clear local storage
+        localStorage.removeItem('cartItems');
+        
+        // Reset cart
+        cartItems = [];
+        
+        // Refresh display
+        displayCart();
+
+        // Show success message
+        alert('Checkout successful! Thank you for your purchase.');
+        return true;
+    } catch (error) {
+        console.error("Checkout error:", error);
+        alert('An error occurred during checkout. Please try again.');
+        return false;
+    }
+}
+
+// Add event listener for checkout form submission
+document.addEventListener('DOMContentLoaded', () => {
+    const checkoutForm = document.querySelector('form.needs-validation');
+    
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Validate form first
+            if (checkoutForm.checkValidity()) {
+                const checkoutSuccess = await checkoutCart();
+                
+                if (checkoutSuccess) {
+                    // Redirect to home page
+                    window.location.href = './home.html';
+                }
+            }
+
+            checkoutForm.classList.add('was-validated');
+        }, false);
+    }
+});
+
+// Existing export/window assignments
 window.removeFromCart = removeFromCart;
 window.addToCart = addToCart;
 window.displayCart = displayCart;
+window.checkoutCart = checkoutCart;

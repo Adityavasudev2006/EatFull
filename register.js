@@ -100,7 +100,6 @@ document.getElementById('registerBtn').addEventListener('click', async function 
           itemsInCart: [],        // Initially empty array
           items_bought_name: [],  // Initially empty array
           time_of_buy: [],        // List to store purchase times (Initially empty)
-          location: ""        // Empty string initially
       });
 
       console.log("User registered and data stored in Firestore");
