@@ -20,7 +20,6 @@ const defaultItemRanking = [
 ];
 
 // --- Firebase Initialization ---
-// Import Firestore functions (assuming you are using modules, adjust if using compat)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
@@ -36,7 +35,6 @@ try {
     applyRankingDOM(defaultItemRanking, 'default (Firebase init failed)');
 }
 
-// --- Helper Functions ---
 
 /**
  * Fetches recent purchase history from Firestore.
