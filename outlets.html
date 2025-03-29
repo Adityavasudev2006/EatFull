@@ -388,6 +388,122 @@ body.dark-theme .rating-star-metallic {
     text-shadow: 1px 1px 1px #8B4513; 
 }
 
+.card-details {
+  font-size: 0.85rem; /* Slightly smaller text for details */
+  color: #6c757d; /* Grey color for less emphasis */
+  margin-bottom: 10px; /* Space before price/buttons */
+}
+
+.card-details span {
+  display: inline-block; /* Or block if you want them on new lines */
+  margin-right: 12px; /* Space between detail items */
+}
+
+.card-details i {
+  margin-right: 4px; /* Space between icon and text */
+  color: #007bff; /* Or use a theme color */
+  width: 15px; /* Ensure icons align nicely */
+  text-align: center;
+}
+
+.item-price {
+  font-size: 1.5rem; /* Make price prominent */
+  font-weight: 600;
+  color: #333; /* Or keep your #price_tag styling */
+  display: block; /* Put it on its own line */
+  margin-bottom: 15px; /* Space before buttons */
+  text-align: left; /* Or right if preferred */
+}
+
+/* Dark theme adjustments */
+body.dark-theme .card-details {
+  color: #aaa;
+}
+body.dark-theme .card-details i {
+  color: #5dade2; /* Match dark theme accent */
+}
+body.dark-theme .item-price {
+  color: #eee;
+}
+
+.card-heading {
+  font-size: 1.15rem; /* Adjust as needed */
+  font-weight: 600; /* Medium bold */
+  margin-bottom: 8px; /* Space after heading */
+  color: #212529; /* Darker color */
+  line-height: 1.3;
+}
+
+.rating-display { /* Style the small tag */
+  font-weight: 500;
+  font-size: 1rem; /* Slightly larger rating */
+  /* Align vertically with the center of the buttons */
+  display: flex;
+  align-items: center;
+}
+
+/* Dark theme adjustments */
+body.dark-theme .card-heading {
+  color: #e8e8e8;
+}
+body.dark-theme .rating-display {
+   color: #b0b0b0 !important; /* Override text-body-secondary if needed */
+}
+
+.item-card .card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 1px solid #dee2e6; /* Add a subtle border */
+}
+
+.item-card .card:hover {
+  transform: translateY(-5px); /* Lift the card slightly */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; /* Enhance shadow - use !important carefully to override Bootstrap */
+}
+
+/* Dark theme adjustments */
+body.dark-theme .item-card .card {
+   border: 1px solid #444;
+}
+
+body.dark-theme .item-card .card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3) !important; /* Darker shadow for dark theme */
+}
+
+.veg-nonveg-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+  border: 1px solid #ccc; /* Default border */
+}
+
+/* Color based on data attribute */
+.item-card[data-veg="veg"] .veg-nonveg-indicator {
+  background-color: #28a745; /* Green */
+  border-color: #1c7430;
+}
+
+.item-card[data-veg="nonveg"] .veg-nonveg-indicator {
+  background-color: #8b4513; /* Brown */
+  border-color: #5a2d0c;
+}
+
+/* Dark theme adjustments */
+body.dark-theme .veg-nonveg-indicator {
+    border: 1px solid #666;
+}
+body.dark-theme .item-card[data-veg="veg"] .veg-nonveg-indicator {
+  background-color: #34ac4e; /* Lighter Green */
+  border-color: #2a8a3e;
+}
+body.dark-theme .item-card[data-veg="nonveg"] .veg-nonveg-indicator {
+  background-color: #a0522d; /* Lighter Brown */
+  border-color: #7a3d11;
+}
+
+
 </style>
   </head>
 
@@ -527,18 +643,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-1 -->
             <div class="col item-card" data-category="maincourse" data-veg="nonveg" data-id="chicken-biryani">
               <div class="card shadow-sm">
-                <img src="images/biryani.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/biryani.jpg" class="card-img-top" alt="Chicken Biriyani" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Chicken Biriyani</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹100</strong></p>
+                  <p class="card-heading">
+                    Chicken Biriyani
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹100</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Chicken Biriyani', 100)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0827, 80.2707)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -547,18 +670,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-2 -->
             <div class="col item-card" data-category="snacks" data-veg="veg" data-id="vada">
               <div class="card shadow-sm">
-                <img src="images/vada.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/vada.jpg" class="card-img-top" alt="Vada" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Vada</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹30</strong></p>
+                  <p class="card-heading">
+                    Vada
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹30</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Vada', 30)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0830, 80.2710)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -567,18 +697,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-3 -->
             <div class="col item-card" data-category="maincourse" data-veg="nonveg" data-id="pizza">
               <div class="card shadow-sm">
-                <img src="images/pizza.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/pizza.jpg" class="card-img-top" alt="Pizza" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Pizza</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹180</strong></p>
+                  <p class="card-heading">
+                    Pizza
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹180</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Pizza', 180)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0840, 80.2720)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -587,18 +724,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-4 -->
             <div class="col item-card" data-category="maincourse" data-veg="nonveg" data-id="italian-prawn-fry">
               <div class="card shadow-sm">
-                <img src="images/seafood.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/seafood.jpg" class="card-img-top" alt="Italian Prawn Fry" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Italian Prawn Fry</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹130</strong></p>
+                  <p class="card-heading">
+                    Italian Prawn Fry
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹130</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Italian Prawn Fry', 130)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0850, 80.2730)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -607,18 +751,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-5 -->
             <div class="col item-card" data-category="snacks" data-veg="nonveg" data-id="momos">
               <div class="card shadow-sm">
-                <img src="images/momos.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/momos.jpg" class="card-img-top" alt="Momos" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Momos</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹60</strong></p>
+                  <p class="card-heading">
+                    Momos
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹60</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Momos', 60)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0860, 80.2740)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -627,18 +778,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-6 -->
             <div class="col item-card" data-category="maincourse" data-veg="nonveg" data-id="grilled-chicken">
               <div class="card shadow-sm">
-                <img src="images/chicken.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/chicken.jpg" class="card-img-top" alt="Grilled Chicken" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Grilled Chicken</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹100</strong></p>
+                  <p class="card-heading">
+                    Grilled Chicken
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹100</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Grilled Chicken', 100)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0870, 80.2750)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -647,18 +805,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-7 -->
             <div class="col item-card" data-category="maincourse" data-veg="nonveg" data-id="japanese-noodles">
               <div class="card shadow-sm">
-                <img src="images/noodles.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/noodles.jpg" class="card-img-top" alt="Japanese Noodles" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Japanese Noodles</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹110</strong></p>
+                  <p class="card-heading">
+                    Japanese Noodles
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹110</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Japanese Noodles', 110)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0880, 80.2760)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -667,18 +832,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-8 -->
             <div class="col item-card" data-category="maincourse" data-veg="veg" data-id="veggie-salad">
               <div class="card shadow-sm">
-                <img src="images/salad.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/salad.jpg" class="card-img-top" alt="Veggie Salad" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Veggie Salad</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹50</strong></p>
+                  <p class="card-heading">
+                    Veggie Salad
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹50</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Veggie Salad', 50)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0890, 80.2770)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -687,18 +859,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-9 -->
             <div class="col item-card" data-category="maincourse" data-veg="veg" data-id="meals">
               <div class="card shadow-sm">
-                <img src="images/meals.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/meals.jpg" class="card-img-top" alt="Meals" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Meals</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹120</strong></p>
+                  <p class="card-heading">
+                    Meals
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹120</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Meals', 120)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0900, 80.2780)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -707,18 +886,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-10 -->
             <div class="col item-card" data-category="maincourse" data-veg="veg" data-id="paneer-tikka">
               <div class="card shadow-sm">
-                <img src="images/curry.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/curry.jpg" class="card-img-top" alt="Paneer Tikka" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Paneer Tikka</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹100</strong></p>
+                  <p class="card-heading">
+                    Paneer Tikka
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹100</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Paneer Tikka', 100)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0910, 80.2790)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -727,18 +913,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-11 -->
             <div class="col item-card" data-category="tiffin" data-veg="veg" data-id="pulka-rotti">
               <div class="card shadow-sm">
-                <img src="images/chapati.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/chapati.jpg" class="card-img-top" alt="Pulka Rotti" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Pulka Rotti</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹100</strong></p>
+                  <p class="card-heading">
+                    Pulka Rotti
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹100</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Pulka Rotti', 100)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0920, 80.2800)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -747,18 +940,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-12 -->
             <div class="col item-card" data-category="tiffin" data-veg="veg" data-id="dosa">
               <div class="card shadow-sm">
-                <img src="images/idli.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/idli.jpg" class="card-img-top" alt="Dosa" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Dosa</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹60</strong></p>
+                  <p class="card-heading">
+                    Dosa
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹60</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Dosa', 60)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0930, 80.2810)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -767,18 +967,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-13 -->
             <div class="col item-card" data-category="drinks" data-veg="veg" data-id="blue-lagoon">
               <div class="card shadow-sm">
-                <img src="images/drinks.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/drinks.jpg" class="card-img-top" alt="Blue Lagoon" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Blue Lagoon</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹100</strong></p>
+                  <p class="card-heading">
+                    Blue Lagoon
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹100</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Blue Lagoon', 100)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0940, 80.2820)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -787,18 +994,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-14 -->
             <div class="col item-card" data-category="desserts" data-veg="veg" data-id="butter-scotch">
               <div class="card shadow-sm">
-                <img src="images/icecream.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/icecream.jpg" class="card-img-top" alt="Butter Scotch" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Butter Scotch</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹55</strong></p>
+                  <p class="card-heading">
+                    Butter Scotch
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹55</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Butter Scotch', 55)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0950, 80.2830)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -807,18 +1021,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-15 -->
             <div class="col item-card" data-category="desserts" data-veg="veg" data-id="strawberry-pie">
               <div class="card shadow-sm">
-                <img src="images/cake.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/cake.jpg" class="card-img-top" alt="Strawberry Pie" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Strawberry Pie</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹100</strong></p>
+                  <p class="card-heading">
+                    Strawberry Pie
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹100</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Strawberry Pie', 100)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0960, 80.2840)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -827,18 +1048,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-16 -->
             <div class="col item-card" data-category="desserts" data-veg="veg" data-id="sweets-jumbo">
               <div class="card shadow-sm">
-                <img src="images/sweets.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/sweets.jpg" class="card-img-top" alt="Sweets Jumbo" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Sweets Jumbo</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹100</strong></p>
+                  <p class="card-heading">
+                    Sweets Jumbo
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹100</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Sweets Jumbo', 100)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0970, 80.2850)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -847,18 +1075,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-17 -->
             <div class="col item-card" data-category="snacks" data-veg="veg" data-id="murukku">
               <div class="card shadow-sm">
-                <img src="images/murukku.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/murukku.jpg" class="card-img-top" alt="Murukku" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Murukku</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹50</strong></p>
+                  <p class="card-heading">
+                    Murukku
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹50</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Murukku', 50)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0980, 80.2860)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -867,18 +1102,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-18 -->
             <div class="col item-card" data-category="snacks" data-veg="veg" data-id="puffs">
               <div class="card shadow-sm">
-                <img src="images/puffs.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/puffs.jpg" class="card-img-top" alt="Puffs" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Puffs</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹20</strong></p>
+                  <p class="card-heading">
+                    Puffs
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹20</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Puffs', 20)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.0990, 80.2870)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -887,18 +1129,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-19 -->
             <div class="col item-card" data-category="snacks" data-veg="veg" data-id="vada-pav">
               <div class="card shadow-sm">
-                <img src="images/vadapav.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/vadapav.jpg" class="card-img-top" alt="Vada Pav" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Vada Pav</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹50</strong></p>
+                  <p class="card-heading">
+                    Vada Pav
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹50</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Vada Pav', 50)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.1000, 80.2880)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
@@ -907,18 +1156,25 @@ body.dark-theme .rating-star-metallic {
             <!-- Card-20 -->
             <div class="col item-card" data-category="snacks" data-veg="veg" data-id="mango-pickle">
               <div class="card shadow-sm">
-                <img src="images/mangopickle.jpg" class="card-img-top" alt="Thumbnail Image" width="100%" height="225" style="object-fit: cover" />
+                <img src="images/mangopickle.jpg" class="card-img-top" alt="Mango Pickle" width="100%" height="225" style="object-fit: cover" />
                 <div class="card-body">
-                  <p class="card-heading">Mango Pickle</p>
-                  <p class="card-text">Locality: Chennai<br />Distance: 20Kms<br />Approx-Time: 30mins<br /><br /><strong id="price_tag" style="font-size: 24px">₹90</strong></p>
+                  <p class="card-heading">
+                    Mango Pickle
+                    <span class="veg-nonveg-indicator"></span>
+                  </p>
+                  <div class="card-details">
+                    <span><i class="fas fa-route"></i> 20 Kms</span>
+                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                  </div>
+                  <strong class="item-price">₹90</strong>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" onclick="addToCart('Mango Pickle', 90)" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add to Cart</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal" onclick="setOutletLocation(13.1010, 80.2890)">View More</button>
                     </div>
-                    <small class="text-body-secondary" style="font-size: 17px">
-                      <i class="fas fa-star rating-star-metallic"></i> 4.3
-                  </small>
+                    <small class="text-body-secondary rating-display" style="font-size: 1rem;">
+                        <i class="fas fa-star rating-star-metallic"></i> 4.3
+                    </small>
                   </div>
                 </div>
               </div>
