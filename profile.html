@@ -264,9 +264,87 @@
                 align-items: center;
             }
         }
+
+        /* --- Loading Screen Styles --- */
+#loading-overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Highest z-index */
+    opacity: 1;
+    transition: opacity 0.5s ease-out; /* Smooth fade out */
+    /* Ensure loader is visible even if JS fails early */
+}
+
+.fancy-loader {
+    width: 70px; /* Adjust size as needed */
+    height: 70px;
+    border-radius: 50%;
+    position: relative;
+
+    background: conic-gradient( 
+        #e74c3c 0deg 70deg,     /* Red segment */
+        transparent 70deg 90deg, /* Gap */
+        #a0522d 90deg 160deg,   /* Brown/Dark Orange segment */
+        transparent 160deg 180deg, /* Gap */
+        #f1c40f 180deg 250deg,  /* Yellow segment */
+        transparent 250deg 270deg, /* Gap */
+        #3498db 270deg 340deg,  /* Blue segment */
+        transparent 340deg 360deg /* Gap */
+    );
+
+    /* Animation */
+    animation: fancy-spin 1.5s linear infinite; /* Adjust speed as needed */
+
+    mask: radial-gradient(transparent 65%, black 66%);
+    -webkit-mask: radial-gradient(transparent 65%, black 66%); /* For Safari/older Chrome */
+}
+
+@keyframes fancy-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Class to blur the main content */
+#main-content.blurred {
+    filter: blur(5px); /* Adjust blur amount as needed */
+    transition: filter 0.3s ease-in-out;
+}
+/* --- End Loading Screen Styles --- */
+
+/* Ensure body takes up height */
+body {
+   /* ... your existing body styles ... */
+   position: relative; 
+   min-height: 100vh; 
+}
+
+/* Ensure navbar is below loader but potentially above blurred content */
+.navbar {
+    /* ... your existing navbar styles ... */
+    z-index: 1000; 
+}
     </style>
 </head>
 <body>
+
+    <!-- Loading Overlay -->
+<div id="loading-overlay">
+    <div class="fancy-loader"></div> 
+</div>
+
+<div id="main-content" class="blurred"> 
+
     <!-- NavBar -->
     <nav class="navbar">
         <a href="./home.html" class="logo">
@@ -439,6 +517,8 @@
         </div>
     </div>
 
+</div>
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -570,6 +650,8 @@
         });
     </script>
     <!-- Chatbot JavaScript -->
+
     <script src="chatbot.js"></script>
+    <script src="profile.js"></script> 
 </body>
 </html>
