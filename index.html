@@ -46,6 +46,7 @@
         top: 20px;
         right: 20px;
         display: flex;
+        flex-direction:column;
         align-items: center;
         justify-content: center;
         width: 50px;
@@ -145,6 +146,45 @@
         background-color: white;
       }
 
+      /* Names box styles */
+      .names-box {
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-top: 2rem; /* Add space between login box and contributors box */
+        margin-left: 0;   /* Remove the side margin */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: fit-content;
+        width: 400px;    /* Match the width of the login form */
+        max-width: 90%;  /* Responsive width */
+      }
+
+    .names-box:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+      transform: scale(1.035);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .names-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .names-list li {
+      margin-bottom: 1rem;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
       /* Responsive adjustments */
       @media (max-width: 768px) {
         .content {
@@ -204,6 +244,7 @@
       <!-- Login Part -->
       <section>
           <div class="modal modal-sheet position-static d-block p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
+            <div class="login-container">
               <div class="modal-dialog" role="document">
                 <div class="modal-content rounded-4 shadow">
                   <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -251,6 +292,17 @@
                     </form>
                   </div>
                 </div>
+
+                <div class="names-box">
+                  <h2 class="fs-5 fw-bold mb-3">Contributers</h2>
+                  <ul class="names-list">
+                    <li>Aditya Vasudev</li>
+                    <li>Kotha Srivibhu</li>
+                    <li>Ananya Vinay</li>
+                  </ul>
+                </div>
+              </div>
+
               </div>
             </div>
       </section>
